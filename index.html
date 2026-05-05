@@ -26,23 +26,23 @@
         button { margin: 10px; padding: 12px; font-family: inherit; background: #ffea00; border: 3px solid #000; cursor: pointer; font-size: 8px; }
         button:hover { background: #fff; }
 
-        /* Style Combat Pokémon */
+        /* Combat Pokémon */
         .battle-ui { width: 90%; max-width: 500px; background: #f8f8f8; color: #333; border: 4px solid #555; border-radius: 10px; padding: 15px; text-align: left; }
-        .hp-container { margin-bottom: 10px; }
-        .hp-bar { height: 10px; background: #ccc; border: 2px solid #333; width: 100%; }
+        .hp-bar { height: 10px; background: #ccc; border: 2px solid #333; width: 100%; margin: 5px 0; }
         .hp-fill { height: 100%; background: #4caf50; transition: width 0.5s; }
         .battle-text { height: 60px; font-size: 8px; color: #000; background: #fff; padding: 10px; border: 2px solid #333; margin-top: 10px; }
 
-        /* Anim Pokémon Sauvage */
-        @keyframes pokeAppear { 
-            0% { transform: scale(0) rotate(0); filter: brightness(0); }
-            50% { transform: scale(1.2) rotate(360deg); filter: brightness(2); }
-            100% { transform: scale(1) rotate(0); filter: brightness(1); }
-        }
-        .wild-appear { animation: pokeAppear 1s ease-out; }
+        /* Mini-jeu Bisou */
+        #kiss-zone { width: 300px; height: 200px; border: 4px dashed #ff00ea; position: relative; margin: 20px; background: rgba(255,0,234,0.1); }
+        .papa-icon { position: absolute; right: 10px; top: 10px; font-size: 20px; transition: 0.3s; }
+        .warning { background: red !important; animation: shake 0.1s infinite; }
 
+        @keyframes pokeAppear { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        .wild-appear { animation: pokeAppear 0.5s ease-out; }
         .flowers-bg { background: #601a35; }
+        .beach-bg { background: linear-gradient(#1e90ff, #f0e68c); }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes shake { 0% { transform: translate(2px); } 50% { transform: translate(-2px); } }
     </style>
 </head>
 <body>
@@ -54,18 +54,16 @@ let currentScene = 0;
 let playerHP = 100;
 let tanguyHP = 150;
 let isBusy = false;
+let kissProgress = 0;
+let papaLooking = false;
 
-// 10 Répliques de Tanguy (Humour amoureux secret)
 const tanguyLines = [
     "Tanguy admire tes pecs en secret...",
     "Tanguy : 'Frappe-moi encore Tyron, ta force m'éblouit !'",
-    "Tanguy : 'Est-ce que tu penses à moi pendant tes séances de boxe ?'",
+    "Tanguy : 'On fait une séance pecs après le duel ?'",
     "Tanguy rougit en voyant ton jeu de jambes...",
     "Tanguy : 'Ton armure est si serrée... j'adore !'",
     "Tanguy : 'Je fais des pompes chaque soir en pensant à toi !'",
-    "Tanguy : 'Tu es plus musclé que tous les autres ingénieurs réunis !'",
-    "Tanguy tente de t'impressionner en bombant le torse !",
-    "Tanguy : 'Et si on partageait un shaker après le combat ?'",
     "Tanguy : 'Tu me barres l'horizon, et j'aime ça !'"
 ];
 
@@ -82,62 +80,87 @@ const scenes = [
     },
     { // 2. LA GUILDE
         content: `
-            <div class="img-box"><img src="tyron.png">[IMAGE TYRON]</div>
+            <div class="img-box"><img src="tyron.png" onerror="this.parentElement.innerHTML='[IMAGE TYRON]'"></div>
             <div class="dialogue">
                 À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
                 Pas encore ingénieur, mais déjà un leader naturel !
             </div>`
     },
-    { // 3. LE DUEL TANGUY (POKÉMON STYLE)
+    { // 3. LE DUEL TANGUY
         id: "battle",
         content: `
             <div class="battle-ui">
-                <div class="hp-container">
-                    <p>SORCIER TANGUY (Niv. 25)</p>
-                    <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%"></div></div>
-                </div>
-                <div style="text-align:center"><img src="tanguy.png" style="width:120px;"></div>
-                <div class="hp-container" style="text-align:right">
-                    <p>TYRON LE CHEVALIER (Niv. 25)</p>
-                    <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
-                </div>
-                <div id="battleText" class="battle-text">TANGUY LE SORCIER veut se battre !</div>
+                <p style="font-size:7px">SORCIER TANGUY (Niv. 25)</p>
+                <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%"></div></div>
+                <div style="text-align:center"><img src="tanguy.png" style="width:100px;" onerror="this.style.display='none'"></div>
+                <p style="font-size:7px; text-align:right">TYRON (Niv. 25)</p>
+                <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
+                <div id="battleText" class="battle-text">TANGUY veut se battre !</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr;">
                     <button onclick="fight('kick')">KICK BOXE</button>
                     <button onclick="fight('regard')">REGARD INTENSE</button>
-                    <button onclick="fight('whey')">BOIRE WHEY</button>
-                    <button onclick="fight('fuite')">FUITE</button>
                 </div>
             </div>`
     },
-    { // 4. APPARITION PRINCESSE (POKÉMON STYLE)
+    { // 4. DRESS TO IMPRESS (VOYAGE)
+        bg: "beach-bg",
+        content: `
+            <div class="dialogue">
+                Séparés par les mers ! Philippines vs Madrid.<br>Tyron doit choisir le look ultime pour rester dans son cœur.
+            </div>
+            <div id="dress-area">
+                <button onclick="next()">MAILLOT CLASSIQUE</button>
+                <button onclick="alert('STYLE PIXEL ABSOLU !'); next()">PERRUQUE ROSE & GANTS</button>
+                <button onclick="next()">TORSE NU HUILÉ</button>
+            </div>`
+    },
+    { // 5. APPARITION PRINCESSE
         bg: "flowers-bg",
         content: `
             <div class="wild-appear">
-                <img src="princesse.png" class="img-box" style="border-radius:50%; border:8px solid gold;">
+                <img src="princesse.png" class="img-box" style="border-radius:50%; border:8px solid gold;" onerror="this.parentElement.innerHTML='[IMAGE PRINCESSE]'">
             </div>
-            <div class="dialogue" style="background:white; color:black; border-color:black;">
+            <div class="dialogue" style="background:white; color:black;">
                 <p><b>UN COUP DE FOUDRE SAUVAGE APPARAÎT !</b></p><br>
-                La Princesse aux cheveux roux et yeux verts vous a percuté !<br>
-                L'attaque est super efficace !
+                La Princesse aux cheveux roux et yeux verts vous a percuté !
             </div>`
     },
-    { // 5. RENCONTRE TEXTE
+    { // 6. LA RENCONTRE
         bg: "flowers-bg",
         content: `
             <div class="dialogue">
                 Devant le parvis de l'église, le temps s'arrête.<br><br>
-                Tyron, le colosse, sent son armure se fendre face à ce regard émeraude.<br><br>
-                Plus belle qu'un high-kick parfait, la princesse vient de capturer son cœur.
+                Tyron, le colosse, sent son armure se fendre face à ce regard émeraude.
             </div>`
     },
-    { // 6. LA SORCIERE
+    { // 7. LA SORCIERE
         content: `
-            <div class="img-box"><img src="sorciere.png"></div>
+            <div class="img-box"><img src="sorciere.png" onerror="this.parentElement.innerHTML='[IMAGE SORCIERE]'"></div>
             <div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;">
-                <b>DRAME !</b> La Sorcière Violette a frappé par jalousie !<br><br>
-                Elle a empoisonné la Princesse avec un <b>croissant aux amandes</b> !<br><br>
-                FOUTUES ALLERGIES !
+                <b>DRAME !</b> La Sorcière Violette a frappé !<br><br>
+                Elle empoisonne la Princesse avec un <b>croissant aux amandes</b> !
+            </div>`
+    },
+    { // 8. MINI-JEU BISOU
+        content: `
+            <div class="dialogue">EMBRASSE LA PRINCESSE POUR LA RÉVEILLER !<br>(Maintiens le bouton quand le Papa ne regarde pas !)</div>
+            <div id="kiss-zone">
+                <div id="papa" class="papa-icon">👴👁️</div>
+                <div style="position:absolute; bottom:10px; width:100%; padding:0 10px;">
+                    AMOUR : <div class="hp-bar"><div id="love-fill" class="hp-fill" style="width:0%; background:#ff00ea;"></div></div>
+                </div>
+            </div>
+            <button onmousedown="startKiss()" onmouseup="stopKiss()" onmouseleave="stopKiss()">EMBRASSER 💋</button>`
+    },
+    { // 9. FINAL
+        bg: "flowers-bg",
+        content: `
+            <div class="dialogue" style="border-color:gold; border-width:8px;">
+                👑 <b>FÉLICITATIONS CHEVALIER !</b> 👑<br><br>
+                Le sort est rompu ! La Princesse est réveillée.<br><br>
+                Tyron l'Allemand, fils de Chine et de Brive, tu as prouvé ta valeur.<br><br>
+                🎁 <b>CADEAU REMPORTÉ :</b><br>LA MONTRE DE SPORT MYTHIQUE (Édition Éternelle)<br><br>
+                ✨ <b>JOYEUX ANNIVERSAIRE TYRON !</b> ✨
             </div>`
     }
 ];
@@ -147,57 +170,54 @@ function render() {
     let s = scenes[currentScene];
     game.className = s.bg || "";
     game.innerHTML = `<div class="scene active">${s.content}${shouldShowBtn() ? '<br><button onclick="next()">CONTINUER</button>' : ''}</div>`;
+    if(currentScene === 7) initKissGame();
 }
 
-function shouldShowBtn() {
-    return currentScene !== 2; // Bouton caché pendant le combat
-}
+function shouldShowBtn() { return ![2, 7, 8].includes(currentScene); }
 
-function next() {
-    currentScene++;
-    if(currentScene < scenes.length) render();
-    else alert("À SUIVRE... JOYEUX ANNIVERSAIRE TYRON !");
-}
+function next() { currentScene++; if(currentScene < scenes.length) render(); }
 
+// --- LOGIQUE COMBAT ---
 function fight(move) {
-    if(isBusy) return;
-    isBusy = true;
+    if(isBusy) return; isBusy = true;
     const txt = document.getElementById("battleText");
-    
-    if(move === 'kick') {
-        tanguyHP -= 35;
-        txt.innerText = "Tyron lance KICK BOXE ! C'est efficace !";
-    } else if(move === 'regard') {
-        tanguyHP -= 50;
-        txt.innerText = "Tyron utilise REGARD INTENSE ! Tanguy est tout chose...";
-    } else if(move === 'whey') {
-        playerHP = Math.min(100, playerHP + 40);
-        txt.innerText = "Tyron boit sa WHEY ! Il gonfle des pecs !";
-    } else {
-        txt.innerText = "Tyron tente de fuir, mais Tanguy le bloque avec ses abdos !";
-    }
-
+    if(move === 'kick') { tanguyHP -= 40; txt.innerText = "Tyron lance KICK BOXE !"; }
+    else { tanguyHP -= 60; txt.innerText = "Tanguy est troublé par ton regard !"; }
     updateBars();
-
     setTimeout(() => {
-        if(tanguyHP <= 0) {
-            txt.innerText = "TANGUY est K.O ! 'Je t'aime, euh... je me vengerai !'";
-            setTimeout(next, 2000);
-        } else {
-            // Attaque aléatoire de Tanguy
-            const randomLine = tanguyLines[Math.floor(Math.random() * tanguyLines.length)];
-            txt.innerText = randomLine;
-            playerHP -= 10;
-            updateBars();
-            isBusy = false;
+        if(tanguyHP <= 0) { txt.innerText = "TANGUY est K.O !"; setTimeout(next, 1500); }
+        else { txt.innerText = tanguyLines[Math.floor(Math.random() * tanguyLines.length)]; isBusy = false; }
+    }, 1000);
+}
+function updateBars() { document.getElementById("eHP").style.width = (tanguyHP/150*100) + "%"; }
+
+// --- LOGIQUE BISOU ---
+let kissInterval;
+function initKissGame() {
+    setInterval(() => {
+        papaLooking = Math.random() > 0.5;
+        const papa = document.getElementById("papa");
+        if(papa) {
+            papa.innerText = papaLooking ? "👴💢 (REGARDE)" : "👴💤 (DORT)";
+            papa.style.color = papaLooking ? "red" : "white";
         }
-    }, 1500);
+    }, 2000);
 }
 
-function updateBars() {
-    document.getElementById("eHP").style.width = (tanguyHP / 150 * 100) + "%";
-    document.getElementById("pHP").style.width = playerHP + "%";
+function startKiss() {
+    kissInterval = setInterval(() => {
+        if(papaLooking) {
+            kissProgress = Math.max(0, kissProgress - 10);
+            document.body.classList.add("warning");
+            setTimeout(() => document.body.classList.remove("warning"), 100);
+        } else {
+            kissProgress += 2;
+            if(kissProgress >= 100) { clearInterval(kissInterval); next(); }
+        }
+        document.getElementById("love-fill").style.width = kissProgress + "%";
+    }, 100);
 }
+function stopKiss() { clearInterval(kissInterval); }
 
 render();
 </script>

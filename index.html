@@ -34,16 +34,21 @@
     button:hover { background: #ffae00; transform: translateY(-2px); }
     button:disabled { background: #555; cursor: not-allowed; }
 
-    /* TYRON PIXEL ART BADASS */
-    .tyron-pixel { position: relative; width: 100px; height: 150px; animation: idle 1s infinite alternate; }
-    .t-helmet { width: 50px; height: 45px; background: #444; position: absolute; top: 10px; left: 25px; border: 3px solid #000; border-radius: 5px; }
-    .t-visor { width: 40px; height: 10px; background: #00ffff; position: absolute; top: 15px; left: 5px; border: 2px solid #000; }
-    .t-body { width: 60px; height: 70px; background: #228b22; position: absolute; top: 55px; left: 20px; border: 3px solid #000; }
-    .t-shoulder { width: 25px; height: 25px; background: #666; position: absolute; top: 55px; border: 3px solid #000; }
-    .t-l { left: 0; } .t-r { right: 0; }
-    .t-belt { width: 60px; height: 10px; background: #ffd700; position: absolute; top: 90px; left: 0; border-top: 2px solid #000; }
+    /* TYRON PIXEL ART REDESIGN - BADASS & JOLI */
+    .tyron-pixel { position: relative; width: 110px; height: 160px; animation: idle 1.2s infinite alternate; }
+    .t-cape { width: 80px; height: 100px; background: #c0392b; position: absolute; top: 55px; left: 15px; border: 3px solid #000; border-radius: 0 0 20px 20px; animation: capeMove 0.6s infinite alternate; z-index: -1; }
+    .t-helmet { width: 54px; height: 50px; background: #bdc3c7; position: absolute; top: 5px; left: 28px; border: 4px solid #000; box-shadow: inset -5px -5px 0 #7f8c8d; }
+    .t-plume { width: 10px; height: 25px; background: #f1c40f; position: absolute; top: -15px; left: 22px; border: 3px solid #000; }
+    .t-visor { width: 44px; height: 8px; background: #34495e; position: absolute; top: 18px; left: 5px; overflow: hidden; }
+    .t-visor::after { content: ''; position: absolute; width: 10px; height: 100%; background: rgba(255,255,255,0.4); animation: visorscan 2s infinite; }
+    .t-body { width: 64px; height: 75px; background: #27ae60; position: absolute; top: 55px; left: 23px; border: 4px solid #000; box-shadow: inset 5px 5px 0 #2ecc71; }
+    .t-shoulder { width: 30px; height: 30px; background: #95a5a6; position: absolute; top: 50px; border: 3px solid #000; z-index: 2; }
+    .t-l { left: 5px; } .t-r { right: 5px; }
+    .t-belt { width: 64px; height: 12px; background: #f39c12; position: absolute; top: 95px; left: 0; border-top: 3px solid #000; border-bottom: 3px solid #000; }
     
-    @keyframes idle { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+    @keyframes visorscan { 0% { left: -10px; } 100% { left: 50px; } }
+    @keyframes capeMove { from { transform: skewX(-2deg); } to { transform: skewX(2deg); } }
+    @keyframes idle { from { transform: translateY(0); } to { transform: translateY(-8px); } }
 
     /* DÉCORS */
     .beach-bg { background: linear-gradient(to bottom, #1e90ff, #87ceeb 50%, #f0e68c 50%, #edc9af); }
@@ -51,7 +56,6 @@
     @keyframes waveMove { from { left: -100%; } to { left: 0; } }
     .sun { position: absolute; top: 50px; right: 50px; width: 80px; height: 80px; background: #ffdf00; border-radius: 50%; box-shadow: 0 0 50px orange; }
 
-    @keyframes crawl { 0% { top: 100%; } 100% { top: -150%; } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
@@ -78,6 +82,7 @@ const scenes = [
 {
   content: `
     <div class="tyron-pixel">
+      <div class="t-plume"></div><div class="t-cape"></div>
       <div class="t-helmet"><div class="t-visor"></div></div>
       <div class="t-shoulder t-l"></div><div class="t-shoulder t-r"></div>
       <div class="t-body"><div class="t-belt"></div></div>
@@ -100,10 +105,10 @@ const scenes = [
     <div style="background:#222; border:4px solid white; padding:10px; width:90%; position:relative;">
       <div style="display:flex; justify-content:space-between; font-size:8px;">
         <div>TYRON: <span id="pHP">100</span>%</div>
-        <div>TANGUY (Amoureux?): <span id="eHP">100</span>%</div>
+        <div>TANGUY: <span id="eHP">100</span>%</div>
       </div>
       <div id="battle-gfx" style="font-size:40px; margin:10px;">🧙‍♂️⚡</div>
-      <p id="log" style="font-size:8px; color:yellow; height:30px;">Tanguy vous regarde avec une intensité suspecte...</p>
+      <p id="log" style="font-size:8px; color:yellow; height:30px;">Tanguy ajuste sa mèche en soupirant.</p>
       <div id="battle-btns">
         <button onclick="fight('kick')">KICK DE MUAY THAÏ</button>
         <button onclick="fight('look')">REGARD INTENSE</button>
@@ -121,12 +126,12 @@ const scenes = [
 {
   bg: 'stars',
   content: `
-    <div style="height:200px; overflow:hidden; position:relative;">
-      <div style="position:absolute; width:100%; animation: crawl 18s linear forwards; color:#ff69b4;">
-        🌸 🏮 🌸<br>Devant l'église,<br>un silence s'installa.<br>🌸 🏮 🌸<br>
-        Le colosse de Brive,<br>le guerrier aux poings d'or,<br>croisa le regard vert<br>d'une Princesse Rousse.<br>🌸 🏮 🌸<br>
-        Un choc plus puissant<br>que n'importe quel KO.<br>L'amour était là.
-      </div>
+    <div style="height:250px; overflow-y:auto; padding: 10px; font-size: 10px; color:#ff69b4; line-height: 1.8;">
+        🌸 LA RENCONTRE DU DESTIN 🌸<br><br>
+        Devant le parvis de l'église, le temps sembla se figer. Tyron, le colosse de Brive, sentit une aura inhabituelle.<br><br>
+        Soudain, elle apparut. Une Princesse Rousse aux yeux verts, éclatante comme une aube corrézienne. Leurs regards se croisèrent.<br><br>
+        Lui, qui savait gérer le stress d'un ring et la rigueur de l'ICAM, se sentit soudain plus timide qu'un premier jour d'école.<br><br>
+        C'était plus qu'un coup de foudre : c'était une évidence. Le guerrier venait de trouver sa muse.
     </div>`
 },
 {
@@ -197,23 +202,21 @@ function fight(type) {
   const btns = document.getElementById("battle-btns").querySelectorAll("button");
   btns.forEach(b => b.disabled = true);
 
-  // Attaque Tyron
-  if(type === 'kick') { enemyHP -= 30; log.innerText = "Tyron lance un kick dévastateur !"; }
-  if(type === 'look') { enemyHP -= 50; log.innerText = "Tyron regarde Tanguy avec virilité. Tanguy bégaye."; }
-  if(type === 'whey') { playerHP = Math.min(100, playerHP + 30); log.innerText = "Tyron boit sa Whey. Ses muscles doublent de volume !"; }
+  if(type === 'kick') { enemyHP -= 30; log.innerText = "Tyron : 'Pour mon honneur !' Tanguy : 'Tes jambes sont magnifiques !'"; }
+  if(type === 'look') { enemyHP -= 50; log.innerText = "Tyron fixe Tanguy. Tanguy : 'Arrête, je vais rougir devant tout le monde !'"; }
+  if(type === 'whey') { playerHP = Math.min(100, playerHP + 30); log.innerText = "Tyron boit sa Whey. Tanguy : 'Laisse moi t'aider à essuyer la goutte...'"; }
   
   updateBars();
 
   setTimeout(() => {
     if(enemyHP <= 0) {
-      log.innerText = "Tanguy : 'Ta beauté me terrasse... je m'avoue vaincu !'";
+      log.innerText = "Tanguy : 'Mon cœur a sauté un battement... Adieu, beau brun !'";
       setTimeout(nextScene, 2000);
     } else {
-      // Attaque Tanguy
       const moves = [
-        {txt: "Tanguy lance 'Sourire charmeur'. Tyron est confus !", dmg: 10},
-        {txt: "Tanguy hurle 'Pourquoi tu réponds pas à mes SMS?!'.", dmg: 20},
-        {txt: "Tanguy utilise 'Pose de Bodybuilder'. C'est super efficace ?", dmg: 15}
+        {txt: "Tanguy : 'Regarde mon nouveau débardeur !' Tyron est confus.", dmg: 10},
+        {txt: "Tanguy : 'Pourquoi tu m'as ghosté sur Tinder?!' Attaque morale !", dmg: 20},
+        {txt: "Tanguy : 'Vien on fait une séance pecs !' Tyron perd 15 PV.", dmg: 15}
       ];
       const m = moves[Math.floor(Math.random()*moves.length)];
       playerHP -= m.dmg;
@@ -223,7 +226,7 @@ function fight(type) {
       setTimeout(() => {
         isBusy = false;
         btns.forEach(b => b.disabled = false);
-        log.innerText = "À ton tour, Chevalier.";
+        log.innerText = "Tanguy attend ton prochain geste avec impatience.";
       }, 2000);
     }
   }, 2000);
@@ -232,7 +235,7 @@ function fight(type) {
 function updateBars() {
   document.getElementById("pHP").innerText = playerHP;
   document.getElementById("eHP").innerText = Math.max(0, enemyHP);
-  if(playerHP <= 0) { alert("Tyron est fatigué... réessaie !"); location.reload(); }
+  if(playerHP <= 0) { alert("Tyron a besoin de repos..."); location.reload(); }
 }
 
 function attackDragon() {

@@ -2,30 +2,29 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Tyron Quest - Aventure Rétro</title>
+  <title>TYRON QUEST - PIXEL RÉTRO ADVENTURE</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Press Start 2P -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap">
   <style>
     body {
-      margin:0;
       background: #2c3d4f;
       font-family: 'Press Start 2P', monospace;
       color: #fdfdff;
-      overflow-x: hidden;
       min-height: 100vh;
+      margin:0;
     }
     #interface {
-      max-width: 920px;
-      margin: 32px auto 16px auto;
+      max-width: 900px;
+      min-height: 340px;
+      margin: 32px auto 22px auto;
       background: linear-gradient(135deg,#2f5557,#4066d8 70%);
       border: 8px solid #fd38a0;
       border-radius: 16px;
       box-shadow: 0 0 22px #0e0c4c;
-      padding: 24px;
-      position: relative;
+      padding: 24px 12px 36px 12px;
       outline: 6px solid #f8c400;
       outline-offset: -8px;
+      position: relative;
     }
     #title {
       text-align:center;
@@ -35,22 +34,33 @@
       text-shadow:2px 2px #fd38a0,0 4px #227b7b;
       margin-bottom:24px;
     }
+    .center {
+      text-align:center;
+    }
     .dialogue-box {
-      background: #f4f4f4;
+      background: #fffefe;
       border: 4px solid #227b7b;
       border-radius: 8px;
       color: #27313b;
-      padding: 20px;
-      margin: 12px auto;
+      padding: 18px 22px 14px 22px;
+      margin: 16px auto;
       font-size: 1em;
       line-height:1.6;
-      box-shadow: 0 0 4px #f8c400;
-      animation: retrofade 1s;
+      box-shadow: 0 0 4px #fd38a0;
+      animation: retrofade 0.7s;
       font-family: 'Press Start 2P', monospace;
+      max-width:650px;
     }
     @keyframes retrofade {
       from {opacity:0;}
       to {opacity:1;}
+    }
+    .dialogue-speaker {
+      color:#fd38a0;
+      font-size:.92em;
+      letter-spacing:2px;
+      margin-bottom:9px;
+      font-family: 'Press Start 2P', monospace;
     }
     .sprite-area {
       height:120px;
@@ -58,27 +68,22 @@
       align-items:center;
       justify-content:center;
       margin-bottom:8px;
-      margin-top:0;
+      margin-top:6px;
     }
     .tyron-pixel {
-      font-family: 'Press Start 2P', monospace;
       width:64px;
       height:100px;
       margin: 0 18px;
       position:relative;
       display:inline-block;
       animation:pulse 2s infinite;
-      /* Pixelart works via box-shadow - see below */
     }
-    /* CSS PIXEL ART de Tyron */
     .tyron-pixel::before {
       content:'';
       display:block;
       width:2px;
       height:2px;
-      /* This is Tyron in pixel art ! Tunic+Hat+Face+Sword+Boots+Shields */
       box-shadow:
-        /* Hat - Vert émeraude */
         14px 2px #22bf38,
         16px 2px #22bf38,
         18px 2px #1e9e2a,
@@ -89,25 +94,21 @@
         20px 4px #22bf38,
         22px 4px #227b7b,
 
-        /* Hat point & bordures */
         18px 6px #3cf244,
         16px 6px #22bf38,
         20px 6px #1e9e2a,
         18px 8px #22bf38,
         20px 8px #3cf244,
 
-        /* Face */
         16px 8px #ffffcc,
         18px 10px #ffe0b0,
         16px 10px #ffe0b0,
         14px 10px #ffe0b0,
 
-        /* Eyes */
         16px 10px #563c2e,
         18px 12px #2f1e11,
         14px 12px #2f1e11,
 
-        /* Body - tunique verte */
         16px 14px #22bf38,
         18px 14px #3cf244,
         14px 14px #1e9e2a,
@@ -116,151 +117,137 @@
         14px 16px #2dd955,
         20px 16px #22bf38,
 
-        /* Belt/Sword */
         15px 16px #604020,
         19px 16px #f8c400,
         17px 16px #f8c400,
         17px 18px #f8c400,
         17px 20px #706e76,
 
-        /* Arms */
         14px 18px #ffe0b0,
         20px 18px #ffe0b0,
         16px 18px #2dd955,
         18px 18px #22bf38,
 
-        /* Legs */
         16px 22px #a37c33,
         18px 22px #503e24,
         14px 22px #503e24,
         20px 22px #967341,
 
-        /* Boots */
         14px 24px #36323a,
         16px 24px #3f2423,
         18px 24px #362e28,
         20px 24px #3f2423,
 
-        /* Shield (bleu pixel relief) */
         22px 16px #3299fe,
         22px 18px #56b9ff,
         23px 16px #183646,
         23px 18px #3299fe,
 
-        /* Sword silver - main gauche */
         12px 16px #d5d5e0,
         12px 18px #c8e2ff,
         10px 16px #a9b2c3,
 
-        /* Chapeau ombre - relief */
         14px 6px #0c811d,
-
-        /* Chapeau rebord doré */
         20px 10px #f8c400,
 
-        /* Tunique intérieur ombre relief */
         16px 18px #1e9e2a,
         18px 20px #227b7b
-
         ;
       position:absolute;
       top:0; left:0;
     }
-    /* ANIMATION Tyron Pulse */
     @keyframes pulse {
       0% {transform:scale(1);}
       50% {transform:scale(1.05);}
       100% {transform:scale(1);}
     }
-    /* Dialogue */
-    .dialogue-speaker {
-      color:#fd38a0;
-      font-size:.9em;
-      letter-spacing:2px;
-      margin-bottom:8px;
-      font-family: 'Press Start 2P', monospace;
-    }
-    /* Buttons */
+
     .pixel-btn {
       font-family: 'Press Start 2P', monospace;
-      font-size: 1em;
+      font-size: 1.07em;
       color: #27313b;
       background: linear-gradient(90deg, #f8c400, #fd38a0 60%);
       border: 4px solid #227b7b;
       border-radius: 6px;
       box-shadow: 3px 3px 0 #4384d9, 0 0 4px #fd38a0 inset;
-      padding:12px 18px;
-      margin:12px 8px;
+      padding:16px 26px;
+      margin:22px 8px;
       cursor:pointer;
-      transition: transform .08s;
+      display:inline-block;
+      transition: transform .09s;
     }
     .pixel-btn:active {
       background: linear-gradient(90deg,#fd38a0,#f8c400 60%);
       transform:scale(0.98);
     }
-    /* Sprite area ENEMI, EMOJIS */
-    .emoji-friends {font-size:3em;}
-    .emoji-boss {font-size:5em;}
-    /* Décor CSS NES */
+    .pixel-btn.big {
+      font-size:1.16em;
+      padding:24px 36px;
+      margin:40px auto 0 auto;
+      letter-spacing:2px;
+      display:block;
+    }
+    .emoji-friends {font-size:2.35em;letter-spacing:7px;}
+    .emoji-boss {font-size:4em;}
     .decor-icam {
       width:100%;
-      height:100px;
+      height:98px;
       background: linear-gradient(135deg,#eaf8ff,#d2ceaf 85%);
       border-bottom: 4px solid #227b7b;
       display:flex;
       align-items:center;
       justify-content:center;
       margin-bottom: 10px;
+      margin-top:12px;
     }
     .decor-plage {
       width:100%;
-      height:100px;
+      height:86px;
       background: linear-gradient(90deg,#48e3ac 15%,#b6e0ff 45%,#fdea9c 70%,#ffecb3 100%);
       border-bottom: 4px solid #f8c400;
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
       position:relative;
+      margin-bottom:6px;
     }
     .palmtree {
       width:20px;height:70px;
       position:absolute;
-      left:35px;bottom:10px;
+      left:35px;bottom:6px;
       background:#644b13;
       border-radius:8px;
     }
     .palmtree::after {
       content:'';
       display:block;
-      width: 46px;
-      height: 16px;
+      width: 44px;
+      height: 14px;
       border-radius:22px 32px 0 0;
       background: linear-gradient(90deg,#34d172,#28a964 60%);
-      position:absolute;top:0;left:-18px;
+      position:absolute;top:0;left:-17px;
       transform:rotate(-14deg);
     }
-    /* Rose Manga */
     .decor-manga {
       width:100%;
-      height:120px;
-      background:linear-gradient(90deg,#ffd6fa #fd38a0 80%);
+      height:98px;
+      background:linear-gradient(90deg,#ffd6fa,#fd38a0 80%);
       text-align:center;
-      padding-top:20px;
+      padding-top:17px;
       color:#fd38a0;
-      font-size:2.2em;
+      font-size:2.0em;
       letter-spacing:4px;
+      margin-bottom:12px;
     }
-    /* Mariage */
     .decor-wedding {
       width:100%;
-      height:120px;
+      height:100px;
       background:linear-gradient(90deg,#fffefa,#fd38a0 80%);
       text-align:center;
       padding-top:12px;
       color:#227b7b;
       font-size:2em;
     }
-    /* Message Final */
     .sparkle {
       color:#f8c400;
       text-shadow:0 4px #fd38a0,0 8px #227b7b;
@@ -276,26 +263,25 @@
       50% {filter:brightness(2);}
       100% {filter:brightness(1);}
     }
-    /* Pokémon Combat */
     .combat-pokemon {
-      background:#f2f2f2;
+      background:#fffefe;
       border: 6px solid #227b7b;
       border-radius: 12px;
       box-shadow: 0 0 4px #fd38a0;
-      padding:12px 8px;
-      margin:24px auto;
+      padding:14px 10px;
+      margin:18px auto;
       width:420px;
       font-family: 'Press Start 2P', monospace;
     }
     .combat-pokemon .tyron-combat {
       width:42px;display:inline-block;
       vertical-align:middle;
-      margin-right:12px;
-      margin-top: 10px;
+      margin-right:16px;
+      margin-top: 7px;
       margin-bottom: 10px;
     }
     .combat-pokemon .tanguy-combat {
-      font-size:3em;display:inline-block;
+      font-size:2.6em;display:inline-block;
       margin-left:12px;
       vertical-align:middle;
       margin-top: 5px;
@@ -310,7 +296,7 @@
     }
     .combat-bars {
       font-size:.9em;
-      margin-bottom:8px;
+      margin-bottom:6px;
       display:flex;align-items:center;justify-content:space-between;
     }
     .combat-bars span {
@@ -325,12 +311,11 @@
       display:flex;justify-content:space-between;gap:18px;
       margin-top:18px;
     }
-    /* Boss Final DRAGON */
     .boss-area {
       display:flex;align-items:center;justify-content:center;
       margin:0 36px 18px 36px;
       position:relative;
-      height:150px;
+      height:110px;
     }
     .boss-area .emoji-boss {
       animation:dragonfire 1.2s infinite;
@@ -341,22 +326,21 @@
       100% {filter:drop-shadow(0 0 0px #f8c400);}
     }
     .boss-flame {
-      width:32px;
-      height:32px;
-      background: radial-gradient(circle at 14px 20px,#fd38a0,#f8c400,#f47a48 60%);
+      width:30px;
+      height:30px;
+      background: radial-gradient(circle at 12px 16px,#fd38a0,#f8c400,#f47a48 60%);
       border-radius:100%;
       position:absolute;
-      left:105px;
-      top:38px;
+      left:90px;
+      top:29px;
       animation: flame 0.9s infinite;
       z-index:2;
     }
     @keyframes flame {
-      0% {opacity:.5;}
+      0% {opacity:.4;}
       50% {opacity:1;}
-      100% {opacity:.5;}
+      100% {opacity:.4;}
     }
-    /* Mini jeu Embrasser princesse */
     .kiss-area {
       margin:18px 0;
       text-align:center;
@@ -364,6 +348,9 @@
       border:4px solid #fd38a0;
       border-radius:12px;
       padding:18px;
+      max-width:380px;
+      margin-left:auto;
+      margin-right:auto;
     }
     .kiss-btn {
       font-size:2em;
@@ -377,6 +364,7 @@
       font-family: 'Press Start 2P', monospace;
       cursor:pointer;
       transition: background .12s;
+      letter-spacing:2px;
     }
     .kiss-btn:active {
       background:#fd38a0;
@@ -385,17 +373,20 @@
     .kiss-papa-watch {
       display:inline-block;
       animation: lookleft 1.4s infinite;
+      font-size:1.4em;
+      margin-right:14px;
+      margin-bottom:-8px;
     }
     @keyframes lookleft{
       0%,100% {filter:grayscale(0);}
       60% {filter:grayscale(0.92);}
     }
-
-    /* Responsive */
     @media (max-width:700px){
-      #interface{max-width:98vw;padding:8px;}
+      #interface{max-width:99vw;padding:8px;}
       .combat-pokemon {width:96vw;}
       .boss-area{margin:0 2vw;}
+      .dialogue-box{max-width:96vw;}
+      .kiss-area{max-width:98vw;}
     }
   </style>
 </head>
@@ -405,72 +396,79 @@
     <div id="game"></div>
   </div>
   <script>
-    // --- STATE ---
+    // Etat principal du jeu
     const state = {
-      step: 0,     // étape du scénario
+      step: 0,     // étape scénario
       pokemon: {tyronHP: 62, tanguyHP: 60}, // combat
-      dress:{robe:false,perruque:false},    // dress-up
-      kisses:0, papaWatch:false,            // mini-jeu
-      dragonHP: 18, }
-    // --- FRIENDS ---
-    const amis1 = '👦 🧑 🎸 👨‍🎤 🦄 🐼 🧑‍🔬'; // Jérémy, Louis, Hugo, Gabin, Sacha, Léon, Auguste
-    const amis2 = '👸 👨‍🏫 👨‍🎓 🕵️‍♂️ 🦄 👨‍⚕️ 🕺 👨‍🚀 👨‍🔧'; // Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan, Quentin
-    // --- MOTIFS ---
-    const princessEmoji = '👸'; // rousse yeux verts
-    // --- GAME ---
+      dress:{robe:false,perruque:false},
+      kisses:0, papaWatch:false,
+      dragonHP: 18,
+      started:false
+    };
+    // Liste des amis et emojis
+    const amis1 = '👦 🧑 🎸 👨‍🎤 🦄 🐼 🧑‍🔬';
+    const amis2 = '👸 👨‍🏫 👨‍🎓 🕵️‍♂️ 🦄 👨‍⚕️ 🕺 👨‍🚀 👨‍🔧';
+    const princessEmoji = '👸';
+
+    // Affichage principal
     function show() {
       let html = '';
-      // Sprite zone !
       let sprite = '<div class="sprite-area"><span class="tyron-pixel"></span></div>';
+      // --- Ecran d'accueil ---
+      if(!state.started) {
+        html += '<div class="center">';
+        html += '<div class="dialogue-box" style="font-size:1.2em;">Bienvenue dans l\'aventure <b>TYRON QUEST</b>.<br>Le pixel art, la tunique verte, les amis emoji et les blagues de papa n\'attendent que toi !</div>';
+        html += sprite;
+        html += '<button class="pixel-btn big" onclick="startGame()">COMMENCER L\'AVENTURE</button>';
+        html += '</div>';
+        document.getElementById('game').innerHTML = html;
+        return;
+      }
 
+      // --- SCENES ---
       switch(state.step){
-        // --- 1. PROLOGUE ---
-        case 0:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>';
-          html += '<b>Il y a très longtemps...</b><br>Dans une contrée fort pixelisée, la légende naissait sous la forme d\'un petit chevalier, aussi coloré que l\'inventeur du Rubik\'s cube. Son nom ? <b>Tyron</b>.<br><br>Le 6 mai 2003 (un mardi, donc déjà condamné à galérer la semaine) naissait ce héros mystérieux au chapeau vert.<br><br>La rumeur prétend qu\'à sa naissance, le médecin a crié "Il est trop pixel pour toi !".</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Naissance épique !</button>';
-          break;
+        case 0: // Prologue
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>'
+            + '<b>Il y a très longtemps...</b><br> Dans une contrée fort pixelisée, la légende naissait sous la forme d\'un petit chevalier, aussi coloré que l\'inventeur du Rubik\'s cube. Son nom ? <b>Tyron</b>.<br><br>'
+            + 'Le 6 mai 2003 (un mardi, donc déjà condamné à galérer la semaine) naissait ce héros mystérieux au chapeau vert.<br><br>'
+            + 'La rumeur prétend qu\'à sa naissance, le médecin a crié "Il est trop pixel pour toi !".</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Naissance épique !</button>';
+        break;
 
-        // --- 2. Guilde Nouvelle Famille ---
-        case 1:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>';
-          html += '<b>Tyron</b> grandit en recrutant sa première guilde légendaire :<br>';
-          html += amis1+'<br>Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>Sérieusement, qui a déjà vu autant d\'amis en tunique verte ?';
-          html += '<br>Ils ne sont pas pixel art, mais qui a le temps pour ça ?</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">La team pixel !</button>';
-          break;
+        case 1: // Guilde Nouvelle Famille
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>'
+            + '<b>Tyron</b> grandit en recrutant sa première guilde légendaire :<br>'
+            + amis1+'<br>Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>'
+            + 'Sérieusement, qui a déjà vu autant d\'amis en tunique verte ?<br>Ils ne sont pas pixel art, mais qui a le temps pour ça ?</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">La team pixel !</button>';
+        break;
 
-        // --- 3. Découverte: ICAM ---
-        case 2:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>';
-          html += 'Après avoir survécu à <i>l\'épreuve du réveil matin</i>, Tyron décide de découvrir le monde (ou du moins, la ville voisine qui a une boulangerie ouverte le dimanche).<br><br>Il rejoint la légendaire académie des ingénieurs : <b>ICAM</b>.<br><br>Oui, l\'école où le café est aussi fort que les sauteuses en TP.</div>';
-          html += '<div class="decor-icam"><span style="font-size:2.4em;">🏫 🛠️ 💡</span> <span class="tyron-pixel"></span></div>';
-          html += '<button class="pixel-btn" onclick="next()">Je veux du savoir !</button>';
-          break;
+        case 2: // Découverte: ICAM
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">📝 Narrateur</div>'
+            + 'Après avoir survécu à <i>l\'épreuve du réveil matin</i>, Tyron décide de découvrir le monde (ou du moins, la ville voisine qui a une boulangerie ouverte le dimanche).<br><br>'
+            + 'Il rejoint la légendaire académie des ingénieurs : <b>ICAM</b>.<br><br>'
+            + 'Oui, l\'école où le café est aussi fort que les sauteuses en TP.</div>'
+            + '<div class="decor-icam"><span style="font-size:2.08em;">🏫 🛠️ 💡</span> <span class="tyron-pixel"></span></div>'
+            + '<button class="pixel-btn" onclick="next()">Je veux du savoir !</button>';
+        break;
 
-        // --- 4. Sorcier Tanguy ---
-        case 3:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">🧙‍♂️ Le Sorcier Tanguy</div>';
-          html += 'Mais à peine arrivé... le sorcier <b>Tanguy</b> apparaît.<br>Il envoie un sort :<br><b>Brouillard mental !</b><br>';
-          html += 'Soudain, Tyron oublie qu\'il n\'a jamais su résoudre un intégrale.<br>Ce sort rend la machine à café invisible.<br>Aïe. Il va falloir un combat épique (et complètement déjanté) pour s\'en sortir !</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">À l\'attaque du sorcier !</button>';
-          break;
+        case 3: // Sorcier Tanguy
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">🧙‍♂️ Le Sorcier Tanguy</div>'
+            + 'Mais à peine arrivé... le sorcier <b>Tanguy</b> apparaît.<br>Il envoie un sort :<br><b>Brouillard mental !</b><br>'
+            + 'Soudain, Tyron oublie qu\'il n\'a jamais su résoudre un intégrale.<br>Ce sort rend la machine à café invisible.<br>Aïe. Il va falloir un combat épique (et complètement déjanté) pour s\'en sortir !</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">À l\'attaque du sorcier !</button>';
+        break;
 
-        // --- 5. Combat Pokemon vs Tanguy ---
-        case 4:
+        case 4: // Combat Pokemon vs Tanguy
           html += '<div class="combat-pokemon">';
-          // Tanguy sprite: emoji culturiste pose JoJo
           html += '<div class="combat-bars">';
           html += `<span>Tyron HP: ${state.pokemon.tyronHP}/62</span><span>Tanguy HP: ${state.pokemon.tanguyHP}/60</span>`;
           html += '</div>';
-          html += '<span class="tyron-combat">';
-          html += '<span class="tyron-pixel"></span>';
-          html += '</span>';
+          html += '<span class="tyron-combat"><span class="tyron-pixel"></span></span>';
           html += '<span class="tanguy-combat">💪🧙‍♂️</span>';
-
           html += '<div style="margin-top:8px;font-size:.9em;">Tanguy pose façon <i>JoJo\'s Bizarre Adventure</i> et te lance un regard ambigu...<br><span style="color:#fd38a0;">(on soupçonne qu\'il t\'aime bien en secret)</span></div>';
           html += '<div class="combat-choices">';
           html += `<button class="pixel-btn" onclick="atkPokemon(1)">Attaque Épée</button>`;
@@ -478,135 +476,239 @@
           html += `<button class="pixel-btn" onclick="atkPokemon(3)">Manger une barre choco</button>`;
           html += '</div>';
           html += '</div>';
-          break;
+        break;
 
-        // --- 6. Libéré du sort ---
-        case 5:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Tyron</div>';
-          html += '<b>Victoire !</b> Après un combat intense, tu as brisé le sort.<br>L\'univers te remercie (même la cafetière).<br>Le sorcier Tanguy, lui, s\'est abonné à ton Instagram.<br><i>"C\'était pas si mal"</i>, avoue-t-il en froissant sa tunique.<br>Et tu es enfin prêt à rencontrer tes nouveaux amis !';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">À la découverte de la guilde ICAM !</button>';
-          break;
+        case 5: // Libéré du sort
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Tyron</div>'
+            + '<b>Victoire !</b> Après un combat intense, tu as brisé le sort.<br>L\'univers te remercie (même la cafetière).<br>Le sorcier Tanguy, lui, s\'est abonné à ton Instagram.<br><i>"C\'était pas si mal"</i>, avoue-t-il en froissant sa tunique.<br>Et tu es enfin prêt à rencontrer tes nouveaux amis !</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">À la découverte de la guilde ICAM !</button>';
+        break;
 
-        // --- 7. Rencontre nouveaux amis ---
-        case 6:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += 'À l\'ICAM, Tyron découvre une guilde plus grande que les stocks de caféine :<br>';
-          html += '<div class="emoji-friends">' + amis2 + '</div>';
-          html += '<b>Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan, Quentin !</b><br>';
-          html += 'On dirait qu\'on a recruté un club d\'émoticônes. Chacun a une spécialité :<br>Danse, robotique, stylos perdus, soirées à thème...';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Légende à la messe !</button>';
-          break;
+        case 6: // Rencontre nouveaux amis
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + 'À l\'ICAM, Tyron découvre une guilde plus grande que les stocks de caféine :<br>'
+            + '<div class="emoji-friends">' + amis2 + '</div>'
+            + '<b>Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan, Quentin !</b><br>'
+            + 'On dirait qu\'on a recruté un club d\'émoticônes. Chacun a une spécialité :<br>Danse, robotique, stylos perdus, soirées à thème...</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Légende à la messe !</button>';
+        break;
 
-        // --- 8. Rencontre Religion, princesse ---
-        case 7:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += 'Reconforté par ses nouveaux amis, Tyron reconnecte avec sa foi.<br>';
-          html += 'Il va à la messe un dimanche pixelisé.<br>Et là<br><b>BOUM</b>: Une rencontre divine (et rousse)<br>';
-          html += 'Une <b>princesse rousse aux yeux verts</b> apparaît, auréolée d\'un halo émoticône magique.<br>';
-          html += '<div style="text-align:center;font-size:2.8em;">'+princessEmoji+'</div>';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Magie manga !</button>';
-          break;
+        case 7: // Rencontre Religion
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + 'Reconforté par ses nouveaux amis, Tyron reconnecte avec sa foi.<br>'
+            + 'Il va à la messe un dimanche pixelisé.<br>Et là<br><b>BOUM</b>: Une rencontre divine (et rousse)<br>'
+            + 'Une <b>princesse rousse aux yeux verts</b> apparaît, auréolée d\'un halo émoticône magique.<br>'
+            + '<div style="text-align:center;font-size:2.5em;">'+princessEmoji+'</div></div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Magie manga !</button>';
+        break;
 
-        // --- 9. Rencontre Manga ---
-        case 8:
+        case 8: // Rencontre Manga
           html += '<div class="decor-manga">🌸 🌹 <b>Rencontre manga !</b> 🌸 🌹</div>';
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Tyron</div>';
-          html += '<b>BIM💥</b> Tyron bouscule la princesse (par accident, ou manque de pixels?).<br>';
-          html += 'Fond rose pastel, yeux écarquillés... Le crush est en train d\'importer des feelings.<br>';
-          html += 'Mais, typique : la vie n\'est pas un jeu vidéo facile. Les quêtes personnelles les séparent pendant un an...';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Séparation tragique !</button>';
-          break;
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Tyron</div>'
+            + '<b>BIM💥</b> Tyron bouscule la princesse (par accident, ou manque de pixels?).<br>'
+            + 'Fond rose pastel, yeux écarquillés... Le crush est en train d\'importer des feelings.<br>'
+            + 'Mais, typique : la vie n\'est pas un jeu vidéo facile. Les quêtes personnelles les séparent pendant un an...</div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Séparation tragique !</button>';
+        break;
 
-        // --- 10. Séparation & Philippines ---
-        case 9:
-          html += '<div class="decor-plage"><div class="palmtree"></div> <span style="font-size:3em;margin-left:80px">🏖️ 🍹 🎉</span></div>';
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += 'La princesse part à <b>Madrid</b> pour une quête mystérieuse.<br>Tyron, lui, s\'envole aux <b>Philippines</b> accompagné de PA, Quentin, Martin et Pilou.<br>';
-          html += 'Pas de dragons, mais du soleil et... des amis fêtards qui veulent aller en boîte !<br><br><i>L\'alcool n\'est pas cher : le pixel s\'active.</i>';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Dress To Impress !</button>';
-          break;
+        case 9: // Séparation & Philippines
+          html += '<div class="decor-plage"><div class="palmtree"></div> <span style="font-size:2.5em;margin-left:80px">🏖️ 🍹 🎉</span></div>';
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + 'La princesse part à <b>Madrid</b> pour une quête mystérieuse.<br>Tyron, lui, s\'envole aux <b>Philippines</b> accompagné de PA, Quentin, Martin et Pilou.<br>'
+            + 'Pas de dragons, mais du soleil et... des amis fêtards qui veulent aller en boîte !<br><br><i>L\'alcool n\'est pas cher : le pixel s\'active.</i></div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Dress To Impress !</button>';
+        break;
 
-        // --- 11. Mini-jeu Dress to Impress ---
-        case 10:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += '<b>Mini-jeu : Dress To Impress</b> <br>Tyron doit choisir sa tenue pour rentrer en boîte.<br><br>';
-          html += 'Attention, la combinaison gagnante : <b>Robe Pailletée + Perruque Rose</b>.<br>';
-          html += '<div style="margin:12px;"><button class="pixel-btn" onclick="dress(\'robe\')">'+(state.dress.robe?'✅':'')+'Robe Pailletée</button><button class="pixel-btn" onclick="dress(\'perruque\')">'+(state.dress.perruque?'✅':'')+'Perruque Rose</button></div>';
+        case 10: // Dress To Impress
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + '<b>Mini-jeu : Dress To Impress</b> <br>Tyron doit choisir sa tenue pour rentrer en boîte.<br><br>'
+            + 'Attention, la combinaison gagnante : <b>Robe Pailletée + Perruque Rose</b>.<br>'
+            + '<div style="margin:12px;">'
+            + `<button class="pixel-btn" onclick="dress('robe')">${state.dress.robe?'✅':'🟩'} Robe Pailletée</button>`
+            + `<button class="pixel-btn" onclick="dress('perruque')">${state.dress.perruque?'✅':'🟪'} Perruque Rose</button>`
+            + '</div>';
+
           if(state.dress.robe && state.dress.perruque){
-            html += '<div style="color:#227b7b;font-size:1.3em;margin:8px;">Parfait ! Un look qui ferait peur à n\'importe quel videur.</div>';
-            html += '<button class="pixel-btn" onclick="next()">Retrouvailles !</button>';
+            html += '<div style="color:#227b7b;font-size:1.13em;margin:11px;">Parfait ! Un look qui ferait peur à n\'importe quel videur.</div>'
+              + '<button class="pixel-btn" onclick="next()">Retrouvailles !</button>';
           }else{
-            html += '<div style="font-size:.95em;color:#fd38a0;">Il te manque un élément...</div>';
+            html += '<div style="font-size:.99em;color:#fd38a0;">Il te manque un élément...</div>';
           }
           html += sprite;
-          break;
-        
-        // --- 12. Retrouvailles --- 
-        case 11:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += '<b>Après une année de pixels lointains...</b><br>Tyron retrouve enfin la princesse !<br>';
-          html += 'L\'ambiance est digne d\'une pub pour les retrouvailles d\'animaux disparus.<br><br>';
-          html += '<b>Mais attention, le drame du croissant approche...</b>';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Le drame du croissant...</button>';
-          break;
+        break;
 
-        // --- 13. Sorcière Croissant ---
-        case 12:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">🧙‍♀️ Sorcière violette</div>';
-          html += '<span style="color:#9933ff;font-size:1.6em;">🧙‍♀️</span> <br>La terrible sorcière violette empoisonne la princesse avec un <b>croissant aux amandes</b>.<br>';
-          html += 'Cuisine maléfique, effet immédiat : la princesse tombe dans un profond sommeil.<br><br>Le médic a dit "c\'est le gluten, sûrement un sort".<br><b>Un dragon du sommeil veille sur elle !</b>';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Dragon final !</button>';
-          break;
+        case 11: // Retrouvailles
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + '<b>Après une année de pixels lointains...</b><br>Tyron retrouve enfin la princesse !<br>'
+            + 'L\'ambiance est digne d\'une pub pour les retrouvailles d\'animaux disparus.<br><br>'
+            + '<b>Mais attention, le drame du croissant approche...</b></div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Le drame du croissant...</button>';
+        break;
 
-        // --- 14. Dragon du sommeil --- 
-        case 13:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += 'La princesse dort, entourée de pixels d\'amandes.<br>Le <b>dragon de la tristesse</b> la protège.<br>Pour la réveiller : il faut vaincre le dragon final.<br>';
-          html += '<b>Prépare ton épée (clic pour attaquer) !</b>';
-          html += '</div>';
-          html += sprite;
-          html += '<button class="pixel-btn" onclick="next()">Vers le boss final !</button>';
-          break;
+        case 12: // Sorcière croissant
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">🧙‍♀️ Sorcière violette</div>'
+            + '<span style="color:#9933ff;font-size:1.2em;">🧙‍♀️</span> <br>La terrible sorcière violette empoisonne la princesse avec un <b>croissant aux amandes</b>.<br>'
+            + 'Cuisine maléfique, effet immédiat : la princesse tombe dans un profond sommeil.<br><br>Le médic a dit "c\'est le gluten, sûrement un sort".<br><b>Un dragon du sommeil veille sur elle !</b></div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Dragon final !</button>';
+        break;
 
-        // --- 15. Boss Final Dragon ---
-        case 14:
-          html += '<div class="boss-area">';
-          html += '<span class="emoji-boss">🐉</span>';
-          html += '<span class="boss-flame"></span>';
-          html += '<div style="position:absolute;left:180px;top:100px;font-size:2em;">'+princessEmoji+'</div>';
-          html += '</div>';
-          html += '<div class="dialogue-box">';
-          html += '<div class="dialogue-speaker">Tyron</div>';
-          html += '<b>Dragon de la Tristesse HP: '+state.dragonHP+'/18</b><br>';
-          html += 'Clic sur <b>Attaque Épée</b> pour faire baisser ses pixels !<br>';
+        case 13: // Dragon du sommeil
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + 'La princesse dort, entourée de pixels d\'amandes.<br>Le <b>dragon de la tristesse</b> la protège.<br>Pour la réveiller : il faut vaincre le dragon final.<br>'
+            + '<b>Prépare ton épée (clic pour attaquer) !</b></div>'
+            + sprite
+            + '<button class="pixel-btn" onclick="next()">Vers le boss final !</button>';
+        break;
+
+        case 14: // Boss Final
+          html += '<div class="boss-area">'
+            + '<span class="emoji-boss">🐉</span><span class="boss-flame"></span>'
+            + '<div style="position:absolute;left:130px;top:74px;font-size:2.0em;">'+princessEmoji+'</div></div>'
+            + '<div class="dialogue-box"><div class="dialogue-speaker">Tyron</div>'
+            + '<b>Dragon de la Tristesse HP: '+state.dragonHP+'/18</b><br>'
+            + 'Clic sur <b>Attaque Épée</b> pour faire baisser ses pixels !<br>';
           if(state.dragonHP > 0){
             html += '<button class="pixel-btn" onclick="atkDragon()">Attaque Épée</button>';
           }else{
-            html += '<span style="color:#3299fe;font-size:1.2em;">Le dragon explose en feu d\'artifice pixel !<br>La princesse tremble (et a toujours envie de dormir).</span>';
-            html += '<br><button class="pixel-btn" onclick="next()">Mini-jeu: bisou princier</button>';
+            html += '<span style="color:#3299fe;font-size:1.18em;">Le dragon explose en feu d\'artifice pixel !<br>La princesse tremble (et a toujours envie de dormir).</span><br>'
+              + '<button class="pixel-btn" onclick="next()">Mini-jeu: bisou princier</button>';
+          }
+          html += '</div>' + sprite;
+        break;
+
+        case 15: // Mini-jeu Bisous Princesse
+          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + '<b>Mini-jeu Bisou</b>: Tyron doit embrasser la princesse 4 fois<br>Mais attention, le <b>papa de la princesse</b> surveille (emoji 👨)!<br></div>'
+            + sprite
+            + '<div class="kiss-area">'
+            + '<div style="margin-bottom:12px;">'
+            + (state.kisses>0?'<span style="color:#fd38a0;font-size:1.04em;">Bisous réalisés: '+state.kisses+'/4</span><br>':'')
+            + '<span class="kiss-papa-watch">'+(state.papaWatch?'👨':'🙈')+'</span>'
+            + '<button class="kiss-btn" onclick="kiss()">👄 Bisou</button></div>';
+
+          if(state.kisses >= 4) {
+            html += '<div style="color:#227b7b;font-size:1.2em;margin-top:10px;">Bravo ! Tu as embrassé la princesse sans que son papa te repère.<br></div>'
+              + '<button class="pixel-btn" onclick="next()">Mariage grandiose !</button>';
+          } else if(state.papaWatch) {
+            html += '<div style="color:#fd38a0;font-size:1em;margin-top:10px;">Oups, le papa a vu ! Tu recommences à zéro...</div>'
+              + '<button class="pixel-btn" onclick="resetKiss()">Essayer à nouveau</button>';
           }
           html += '</div>';
-          html += sprite;
-          break;
+        break;
 
-        // --- 16. Mini jeu: Embrasser princesse sans papa ---
-        case 15:
-          html += '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>';
-          html += '<b>Mini-jeu Bisou</b>: Tyron doit embrasser la princesse 4 fois<br>Mais attention, le <b>papa de la princesse</b> surveille (emoji 👨)!<br>';
-          html += '</div>';
-          html += sprite;
-          html += '<div
+        case 16: // Mariage
+          html += '<div class="decor-wedding">🎉💒 GRAND MARIAGE 💍🎉</div>'
+            + '<div class="dialogue-box"><div class="dialogue-speaker">Narrateur</div>'
+            + 'Les amis de la <b>première guilde</b> et ceux de l\'<b>ICAM</b> sont là !<br>'
+            + '<div class="emoji-friends">' + amis1 + ' | ' + amis2 + '</div>'
+            + 'La princesse rousse aux yeux verts rayonne. Tyron, avec son chapeau vert, a officiellement battu tous les boss du pixel.<br>'
+            + 'La légende du croissant est vaincue.<br></div>'
+            + '<div class="sparkle">🎁 La Montre de Sport est offerte ! 🦄✨</div>'
+            + '<button class="pixel-btn big" onclick="restart()">Rejouer l\'aventure</button>';
+        break;
+
+      }
+      document.getElementById('game').innerHTML = html;
+    }
+
+    // Gestion transitions
+    function next(){
+      state.step++;
+      show();
+    }
+    function startGame(){
+      state.started = true;
+      state.step = 0;
+      show();
+    }
+    function restart(){
+      state.step = 0;
+      state.pokemon = {tyronHP:62,tanguyHP:60};
+      state.dress = {robe:false,perruque:false};
+      state.kisses = 0;
+      state.papaWatch = false;
+      state.dragonHP = 18;
+      state.started = true;
+      show();
+    }
+
+    // Combat Pokémon
+    function atkPokemon(type){
+      let msg = '';
+      if(state.pokemon.tyronHP <= 0 || state.pokemon.tanguyHP <= 0){
+        state.step++;
+        show();
+        return;
+      }
+      let t = Math.random()*7+3|0;
+      let y = Math.random()*4+2|0;
+      if(type == 1) { // Épée
+        state.pokemon.tanguyHP -= t;
+        msg = 'Tyron lance un coup d\'épée pixel !';
+      } else if(type == 2) { // Sarcastique
+        state.pokemon.tanguyHP -= y;
+        msg = 'Tyron utilise une punchline qui pique !';
+      } else if(type == 3) { // Barre choco
+        state.pokemon.tyronHP += 6;
+        if(state.pokemon.tyronHP>62) state.pokemon.tyronHP=62;
+        msg = 'Tyron mange une barre choco... ça soigne !';
+      }
+      // Tanguy réplique, sauf s'il est K.O.
+      if(state.pokemon.tanguyHP > 0){
+        if(Math.random()<0.6){
+          state.pokemon.tyronHP -= Math.random()*9+4|0;
+        }
+      }
+      if(state.pokemon.tyronHP<=0) state.pokemon.tyronHP=0;
+      if(state.pokemon.tanguyHP<=0) state.pokemon.tanguyHP=0;
+
+      if(state.pokemon.tanguyHP<=0){
+        setTimeout(()=>{state.step++;show();},520);
+      } else {
+        show();
+      }
+    }
+
+    // Dress to impress mini-jeu
+    function dress(item){
+      state.dress[item] = !state.dress[item];
+      show();
+    }
+
+    // Dragon Boss
+    function atkDragon(){
+      if(state.dragonHP>0){
+        state.dragonHP -= Math.random()*7+4|0;
+        if(state.dragonHP<0) state.dragonHP=0;
+        show();
+      }
+    }
+
+    // Mini-jeu Bisous
+    function kiss(){
+      state.papaWatch = Math.random()<0.27;
+      if(state.papaWatch){
+        show();
+        return;
+      }
+      state.kisses += 1;
+      show();
+    }
+    function resetKiss(){
+      state.kisses = 0;
+      state.papaWatch=false;
+      show();
+    }
+
+    // Lancement au départ
+    show();
+  </script>
+</body>
+</html>

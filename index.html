@@ -2,248 +2,446 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>TYRON QUEST - ICAM EDITION</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tyron le Chevlaier : La Quête de l'ICAM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #1a1a2e;
-      font-family: 'Press Start 2P', monospace;
-      color: #fdfdff;
-      margin: 0;
-      overflow-x: hidden;
+      font-family: 'Press Start 2P', cursive;
+      background: black;
+      color: white;
+      overflow: hidden;
     }
-    #interface {
-      max-width: 900px;
-      min-height: 500px;
-      margin: 20px auto;
-      background: linear-gradient(135deg,#16213e,#0f3460 70%);
-      border: 8px solid #fd38a0;
-      border-radius: 16px;
-      padding: 20px;
-      outline: 6px solid #f8c400;
-      position: relative;
-      text-align: center;
-    }
-    #title {
-      font-size: 1.8em;
-      color: #f8c400;
-      text-shadow: 4px 4px #fd38a0;
-      margin-bottom: 20px;
-    }
-    .dialogue-box {
-      background: rgba(255, 255, 255, 0.95);
-      border: 4px solid #227b7b;
-      color: #1a1a2e;
-      padding: 20px;
-      margin: 15px auto;
-      font-size: 0.9em;
-      line-height: 1.8;
-      max-width: 750px;
-      text-align: left;
-    }
-    .speaker { color: #fd38a0; margin-bottom: 10px; font-weight: bold; }
 
-    /* --- SPRITES PIXEL ART --- */
-    .sprite-container {
+    #game {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .scene {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 30px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .active { display: flex; }
+
+    .dialogue {
+      background: rgba(0,0,0,0.8);
+      border: 4px solid white;
+      padding: 20px;
+      max-width: 90%;
+      line-height: 1.8;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 15px;
+      font-family: inherit;
+      background: yellow;
+      border: 4px solid black;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    button:hover {
+      background: orange;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes stars {
+      from {background-position: 0 0;}
+      to {background-position: 1000px 1000px;}
+    }
+
+    .stars {
+      background: radial-gradient(white 1px, transparent 1px);
+      background-size: 20px 20px;
+      animation: stars 40s linear infinite;
+    }
+
+    .yellow-text {
+      color: yellow;
+      text-shadow: 3px 3px red;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    /* TYRON PIXEL ART */
+    .character-container {
       display: flex;
       justify-content: center;
-      align-items: flex-end;
-      gap: 40px;
-      height: 180px;
-      margin: 20px 0;
+      align-items: center;
+      gap: 120px;
+      margin-top: 40px;
     }
 
-    /* Le Chevalier Tyron (Style Link - Taille XL) */
-    .tyron-sprite {
-      width: 80px; height: 120px;
+    .tyron, .princess {
       position: relative;
-      transform: scale(1.5);
-      image-rendering: pixelated;
-      animation: bounce 0.6s infinite alternate;
-    }
-    .tyron-sprite::before {
-      content: ''; display: block; width: 4px; height: 4px;
-      box-shadow: 
-        12px 4px #22bf38, 16px 4px #22bf38, 20px 4px #22bf38, /* Chapeau */
-        8px 8px #22bf38, 12px 8px #22bf38, 16px 8px #22bf38, 20px 8px #22bf38, 24px 8px #22bf38,
-        8px 12px #ffe0b0, 12px 12px #ffe0b0, 16px 12px #ffe0b0, 20px 12px #22bf38, /* Visage */
-        8px 16px #ffe0b0, 12px 16px #000, 16px 16px #ffe0b0, 20px 16px #ffe0b0, /* Yeux */
-        8px 20px #ffe0b0, 12px 20px #ffe0b0, 16px 20px #ffe0b0,
-        4px 24px #22bf38, 8px 24px #22bf38, 12px 24px #22bf38, 16px 24px #22bf38, 20px 24px #22bf38, /* Tunique */
-        4px 28px #22bf38, 8px 28px #f8c400, 12px 28px #22bf38, 16px 28px #22bf38, /* Ceinture */
-        8px 32px #503e24, 16px 32px #503e24; /* Bottes */
+      width: 180px;
+      height: 260px;
+      animation: bounce 1s infinite alternate;
     }
 
-    /* La Princesse Rousse (Taille XL) */
-    .princess-sprite {
-      width: 80px; height: 120px;
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    /* Tyron */
+    .tyron .head {
+      width: 70px;
+      height: 70px;
+      background: #f2c28b;
+      position: absolute;
+      top: 20px;
+      left: 55px;
+      border: 4px solid black;
+    }
+
+    .tyron .hat {
+      width: 90px;
+      height: 40px;
+      background: green;
+      position: absolute;
+      top: 0;
+      left: 45px;
+      border: 4px solid black;
+    }
+
+    .tyron .body {
+      width: 100px;
+      height: 100px;
+      background: green;
+      position: absolute;
+      top: 90px;
+      left: 40px;
+      border: 4px solid black;
+    }
+
+    .tyron .arm {
+      width: 25px;
+      height: 80px;
+      background: #f2c28b;
+      position: absolute;
+      top: 100px;
+      border: 4px solid black;
+    }
+
+    .tyron .arm.left { left: 10px; }
+    .tyron .arm.right { right: 10px; }
+
+    .tyron .leg {
+      width: 30px;
+      height: 70px;
+      background: brown;
+      position: absolute;
+      top: 190px;
+      border: 4px solid black;
+    }
+
+    .tyron .leg.left { left: 50px; }
+    .tyron .leg.right { right: 50px; }
+
+    /* Princess */
+    .princess .hair {
+      width: 90px;
+      height: 90px;
+      background: orangered;
+      position: absolute;
+      top: 10px;
+      left: 45px;
+      border: 4px solid black;
+    }
+
+    .princess .head {
+      width: 70px;
+      height: 70px;
+      background: #f2c28b;
+      position: absolute;
+      top: 30px;
+      left: 55px;
+      border: 4px solid black;
+    }
+
+    .princess .body {
+      width: 110px;
+      height: 120px;
+      background: pink;
+      position: absolute;
+      top: 100px;
+      left: 35px;
+      border: 4px solid black;
+    }
+
+    .princess .leg {
+      width: 30px;
+      height: 60px;
+      background: pink;
+      position: absolute;
+      top: 220px;
+      border: 4px solid black;
+    }
+
+    .princess .leg.left { left: 55px; }
+    .princess .leg.right { right: 55px; }
+
+    .pink-bg {
+      background: linear-gradient(to bottom, pink, lavender);
+    }
+
+    .beach {
+      background: linear-gradient(to bottom, skyblue 60%, gold 60%);
+    }
+
+    .battle-ui {
+      border: 6px solid white;
+      padding: 20px;
+      width: 80%;
+      background: darkslateblue;
+    }
+
+    .health {
+      width: 200px;
+      height: 20px;
+      background: red;
+      margin: 10px auto;
       position: relative;
-      transform: scale(1.5);
-      image-rendering: pixelated;
-      animation: float 2s infinite ease-in-out;
-    }
-    .princess-sprite::before {
-      content: ''; display: block; width: 4px; height: 4px;
-      box-shadow: 
-        12px 4px #d35400, 16px 4px #d35400, 20px 4px #d35400, /* Cheveux rouss */
-        8px 8px #d35400, 12px 8px #ffe0b0, 16px 8px #ffe0b0, 20px 8px #d35400,
-        8px 12px #d35400, 12px 12px #22bf38, 16px 12px #22bf38, 20px 12px #d35400, /* Yeux verts */
-        8px 16px #ffe0b0, 12px 16px #ffe0b0, 16px 16px #ffe0b0,
-        4px 20px #fd38a0, 8px 20px #fd38a0, 12px 20px #fd38a0, 16px 20px #fd38a0, 20px 20px #fd38a0, /* Robe */
-        4px 24px #fd38a0, 8px 24px #fd38a0, 12px 24px #fd38a0, 16px 24px #fd38a0,
-        4px 28px #fd38a0, 8px 28px #fd38a0, 12px 28px #fd38a0, 16px 28px #fd38a0;
     }
 
-    @keyframes bounce { from { bottom: 0; } to { bottom: 10px; } }
-    @keyframes float { 0%, 100% { transform: scale(1.5) translateY(0); } 50% { transform: scale(1.5) translateY(-10px); } }
-
-    .pixel-btn {
-      font-family: 'Press Start 2P', monospace;
-      padding: 15px 25px;
-      margin: 10px;
-      cursor: pointer;
-      background: #f8c400;
-      border: 4px solid #000;
-      box-shadow: 4px 4px #fd38a0;
+    .health-bar {
+      height: 100%;
+      background: lime;
+      width: 100%;
     }
-    .pixel-btn:hover { background: #fd38a0; color: white; }
 
-    .hidden { display: none; }
-    .health-bar { background: #eee; border: 2px solid #000; height: 20px; width: 200px; margin: 10px auto; position: relative; }
-    .health-fill { background: #22bf38; height: 100%; transition: width 0.3s; }
+    .dragon {
+      font-size: 120px;
+      animation: shake 0.5s infinite alternate;
+    }
+
+    @keyframes shake {
+      from { transform: translateX(-10px);}
+      to { transform: translateX(10px);}
+    }
+
+    .sparkle {
+      animation: sparkle 1s infinite alternate;
+    }
+
+    @keyframes sparkle {
+      from { text-shadow: 0 0 10px yellow; }
+      to { text-shadow: 0 0 30px white; }
+    }
   </style>
 </head>
 <body>
-
-<div id="interface">
-  <div id="title">TYRON QUEST</div>
-  
-  <div id="screen-start">
-    <div class="dialogue-box">
-      Préparez-vous pour une aventure à base de thermodynamique, de bières tièdes et de pixels roussis.
-    </div>
-    <div class="sprite-container"><div class="tyron-sprite"></div></div>
-    <button class="pixel-btn" onclick="goTo('prologue')">START GAME</button>
-  </div>
-
-  <div id="screen-prologue" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">NARRATEUR</div>
-      Tout a commencé le 6 mai 2003. Tyron arrive au monde. Ses parents sont tellement occupés qu'il apprend à coder sa propre console avant de savoir marcher.<br><br>
-      "Si tu veux un biberon, calcule d'abord le débit volumique !" lui disait-on. Il a dû se forger tout seul.
-    </div>
-    <div class="sprite-container"><div class="tyron-sprite"></div></div>
-    <button class="pixel-btn" onclick="goTo('icam')">DIRECTION L'ICAM</button>
-  </div>
-
-  <div id="screen-icam" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">TYRON</div>
-      Bienvenue à l'ICAM. Là où on passe 4h sur un rapport de TP que personne ne lira jamais. <br><br>
-      J'ai recruté ma guilde : Jérémy (le bagarreur qui calcule des intégrales entre deux droites), Louis, Hugo, Gabin, Sacha, Léon et Auguste. On a fait les 400 coups, comme cette fois où on a essayé de transformer le réfectoire en piscine...
-    </div>
-    <div class="sprite-container"><div class="tyron-sprite"></div></div>
-    <button class="pixel-btn" onclick="goTo('jojo')">AFFRONTER TANGUY</button>
-  </div>
-
-  <div id="screen-jojo" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">TANGUY LE MAGICIEN</div>
-      *Prend une pose de JoJo* <br>
-      "Tyron ! Ton projet de fin d'étude est médiocre ! Viens goûter à mes muscles huileux !"
-    </div>
-    <div class="health-bar"><div id="tanguy-hp" class="health-fill" style="width: 100%;"></div></div>
-    <div class="sprite-container"><div class="tyron-sprite"></div> <div style="font-size: 5em;">💪</div></div>
-    <button class="pixel-btn" onclick="hitTanguy()">ATTAQUE CALCULATRICE</button>
-  </div>
-
-  <div id="screen-manga" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">NARRATEUR</div>
-      Après avoir vaincu Tanguy à coups de théorèmes, Tyron bouscule quelqu'un dans le couloir... <br><br>
-      *Ralenti manga activé* <br>
-      Des pétales de roses tombent. C'est elle. La Princesse Rousse aux yeux verts. 
-    </div>
-    <div class="sprite-container"><div class="tyron-sprite"></div><div class="princess-sprite"></div></div>
-    <button class="pixel-btn" onclick="goTo('voyage')">UN AN PLUS LATER...</button>
-  </div>
-
-  <div id="screen-voyage" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">NARRATEUR</div>
-      La vie est injuste, comme un examen de rattrapage le samedi matin. Elle part à Madrid, il part aux Philippines avec Quentin, Martin, PA et Titouan.<br><br>
-      Objectif : Rentrer en boîte de nuit. Mais Tyron et PA n'ont pas le bon dress code...
-    </div>
-    <button class="pixel-btn" onclick="goTo('dress')">DRESS TO IMPRESS</button>
-  </div>
-
-  <div id="screen-dress" class="hidden">
-    <div class="dialogue-box">
-      Pour rentrer en boîte, Tyron et PA doivent se fondre dans la masse... en devenant des reines de la nuit.
-    </div>
-    <div id="outfit-msg"></div>
-    <button class="pixel-btn" onclick="checkDress('fille')">S'habiller en fille</button>
-    <button class="pixel-btn" onclick="checkDress('ingenieur')">Garder son bleu de travail</button>
-  </div>
-
-  <div id="screen-final" class="hidden">
-    <div class="dialogue-box">
-      <div class="speaker">SORCIÈRE DES ALLERGIES</div>
-      "Tiens ma jolie, goûte ce croissant aux amandes pur gluten !" <br><br>
-      La princesse s'écroule ! Vite Tyron, achève le Dragon de la Tristesse !
-    </div>
-    <div class="health-bar"><div id="dragon-hp" class="health-fill" style="width: 100%;"></div></div>
-    <div class="sprite-container"><div class="tyron-sprite"></div><div style="font-size: 5em;">🐉</div></div>
-    <button class="pixel-btn" onclick="hitDragon()">COUP D'ÉPÉE MAGIQUE</button>
-  </div>
-
-  <div id="screen-win" class="hidden">
-    <div class="dialogue-box">
-      La princesse est réveillée ! Le mariage est célébré à l'ICAM avec toute la guilde. On boit de la bière de récup' et on ne calcule plus rien.<br><br>
-      <b>"Bravo Tyron. Pour tes exploits, voici ton trésor..."</b>
-    </div>
-    <div class="sprite-container"><div class="tyron-sprite"></div><div class="princess-sprite"></div></div>
-    <h2 style="color: #f8c400; text-shadow: 2px 2px #000;">⌚ TA NOUVELLE MONTRE DE SPORT !</h2>
-    <button class="pixel-btn" onclick="location.reload()">REJOUER</button>
-  </div>
-
-</div>
+<div id="game"></div>
 
 <script>
-  let tanguyHP = 100;
-  let dragonHP = 100;
+const scenes = [
+{
+bg:'stars',
+content:`
+<div class="yellow-text">
+Il y a très longtemps...<br><br>
+Le 6 mai 2003, sous un ciel plus dramatique qu’un serveur en surcharge avant rendu de projet...<br>
+naquit Tyron le Chevlaier.<br><br>
+Petit héros en tunique verte, moitié sportif, moitié ingénieur,<br>
+capable de courir plus vite qu’un bug critique et boxer plus fort qu’un prof corrigeant un rapport en retard.<br><br>
+Son destin ? Devenir une légende... ou au moins survivre à l’ICAM.
+</div>`
+},
+{
+content:`
+<div class="character-container">
+<div class="tyron">
+<div class="hat"></div><div class="head"></div><div class="body"></div>
+<div class="arm left"></div><div class="arm right"></div>
+<div class="leg left"></div><div class="leg right"></div>
+</div>
+</div>
+<div class="dialogue">
+Tyron recruta sa première guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
+Une bande si solide qu’on aurait dit un groupe WhatsApp sans mute.<br>
+Ensemble, ils affrontèrent randonnées, soirées, films tranquilles...<br>
+et surtout les lendemains où Tyron, après quelques breuvages, devenait plus imprévisible qu’un code sans commentaires.
+</div>`
+},
+{
+content:`
+<div class="dialogue">
+Animé par la noble quête du savoir, Tyron entra à l’ICAM...<br><br>
+Mais à peine son pied posé dans cette académie infernale...<br>
+TANGUY LE SORCIER MUSCLÉ surgit !<br><br>
+“BROUILLARD MENTAL !” hurla-t-il, probablement par amour secret et très mal géré.<br><br>
+Tyron oublia jusqu’à comment différencier une intégrale d’un grille-pain.
+</div>`
+},
+{
+content:`
+<div class="battle-ui">
+<h2>⚔ TYRON vs 💪 TANGUY</h2>
+<div>Tyron ❤️</div>
+<div class="health"><div class="health-bar" id="enemyHealth"></div></div>
+<div style="font-size:80px;">🧙‍♂️💪</div>
+<button onclick="attackTanguy()">ATTAQUE D'INGÉNIERIE</button>
+</div>`
+},
+{
+content:`
+<div class="dialogue">
+Libéré !<br><br>
+Tanguy vaincu retourna faire des poses mystérieuses dans l’ombre.<br><br>
+Tyron rejoignit alors sa nouvelle guilde ICAM : Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan et Quentin.<br><br>
+Assez puissants pour transformer un simple café en réunion de crise de 4 heures.
+</div>`
+},
+{
+bg:'pink-bg',
+content:`
+<div class="character-container">
+<div class="tyron">
+<div class="hat"></div><div class="head"></div><div class="body"></div>
+<div class="arm left"></div><div class="arm right"></div>
+<div class="leg left"></div><div class="leg right"></div>
+</div>
 
-  function goTo(screen) {
-    document.querySelectorAll('#interface > div').forEach(div => div.classList.add('hidden'));
-    document.getElementById('title').classList.remove('hidden');
-    document.getElementById('screen-' + screen).classList.remove('hidden');
-  }
+<div class="princess">
+<div class="hair"></div><div class="head"></div><div class="body"></div>
+<div class="leg left"></div><div class="leg right"></div>
+</div>
+</div>
 
-  function hitTanguy() {
-    tanguyHP -= 34;
-    document.getElementById('tanguy-hp').style.width = tanguyHP + '%';
-    if(tanguyHP <= 0) goTo('manga');
-  }
+<div class="dialogue">
+🌸 Sur le chemin de la messe... 🌹<br><br>
+Tyron, reconstruit dans sa foi et son style approximatif,<br>
+percuta une princesse rousse aux yeux verts.<br><br>
+Le choc fut plus intense qu’un sprint après avoir dit “t’inquiète j’arrive”.<br>
+Le destin venait de compiler.
+</div>`
+},
+{
+bg:'beach',
+content:`
+<div class="dialogue">
+Mais la vie, scénariste sadique, les sépara...<br><br>
+La princesse partit à Madrid.<br>
+Tyron aux Philippines.<br><br>
+Entre plages, soleil et crise vestimentaire,<br>
+notre héros comprit que même la bravoure ne suffisait pas...<br>
+Il fallait du STYLE.
+</div>
+<button onclick="dressGame()">COMMENCER DRESS TO IMPRESS</button>`
+},
+{
+content:`
+<div class="dialogue">
+La sorcière violette surgit...<br><br>
+Dans un acte de cruauté pâtissière absolue,<br>
+elle empoisonna la princesse... avec un croissant aux amandes.<br><br>
+Oui. Un croissant.<br>
+Comme quoi le mal prend parfois la forme d’une viennoiserie.
+</div>`
+},
+{
+content:`
+<div class="dragon">🐉</div>
+<div class="dialogue">
+LE DRAGON DE LA TRISTESSE<br><br>
+Clique ! Sauve ton amour !
+</div>
+<button onclick="attackDragon()">⚔ ATTAQUER</button>`
+},
+{
+content:`
+<div class="sparkle yellow-text">
+👑 MARIAGE GRANDIOSE 👑<br><br>
+Tyron et sa princesse triomphèrent.<br><br>
+Après tant d’épreuves, d’amitié, de sport, d’amour et de croissants douteux...<br>
+Ils obtinrent la récompense suprême :<br><br>
+LA MONTRE DE SPORT LÉGENDAIRE.<br><br>
+FIN... ou peut-être juste l’échauffement.
+</div>`
+}
+];
 
-  function checkDress(choice) {
-    if(choice === 'fille') {
-      alert("Le videur est ébloui par votre grâce ! Vous rentrez !");
-      goTo('final');
-    } else {
-      alert("Le videur n'aime pas les ingénieurs. Refusé !");
-    }
-  }
+let currentScene = 0;
+let enemyHP = 100;
+let dragonHP = 15;
 
-  function hitDragon() {
-    dragonHP -= 25;
-    document.getElementById('dragon-hp').style.width = dragonHP + '%';
-    if(dragonHP <= 0) {
-      alert("Baiser magique activé !");
-      goTo('win');
-    }
-  }
+function renderScene() {
+  const game = document.getElementById("game");
+  let scene = scenes[currentScene];
+  game.className = "";
+  if(scene.bg) game.classList.add(scene.bg);
+
+  game.innerHTML = `
+    <div class="scene active">
+      ${scene.content}
+      ${currentScene < scenes.length-1 && currentScene !== 3 && currentScene !== 6 && currentScene !== 8 ? '<button onclick="nextScene()">CONTINUER</button>' : ''}
+    </div>
+  `;
+}
+
+function nextScene() {
+  currentScene++;
+  renderScene();
+}
+
+function attackTanguy() {
+  enemyHP -= 25;
+  document.getElementById("enemyHealth").style.width = enemyHP + "%";
+  if(enemyHP <= 0) nextScene();
+}
+
+function dressGame() {
+  const game = document.getElementById("game");
+  game.innerHTML = `
+  <div class="scene active">
+    <div class="dialogue">
+    Choisis la tenue ultime pour survivre socialement :
+    </div>
+    <button onclick="wrongDress()">Robe Pailletée</button>
+    <button onclick="correctDress()">Perruque Rose</button>
+  </div>`;
+}
+
+function wrongDress() {
+  alert("Erreur tragique. Même aux Philippines, faut doser.");
+}
+
+function correctDress() {
+  alert("CHARISME MAXIMAL.");
+  nextScene();
+}
+
+function attackDragon() {
+  dragonHP--;
+  if(dragonHP <= 0) nextScene();
+}
+
+renderScene();
 </script>
-
 </body>
 </html>

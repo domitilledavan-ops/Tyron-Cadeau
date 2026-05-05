@@ -22,26 +22,25 @@
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* IMAGE DE COMBAT PLUS GRANDE */
+        .img-battle-large { width: 180px !important; height: auto; margin: 10px 0; }
+
         .dialogue { background: rgba(0,0,0,0.9); border: 4px solid #fff; padding: 15px; max-width: 85%; line-height: 1.6; font-size: 10px; margin-top: 15px; }
         button { margin: 10px; padding: 12px; font-family: inherit; background: #ffea00; border: 3px solid #000; cursor: pointer; font-size: 8px; }
         button:hover { background: #fff; }
 
-        /* Combat Pokémon UI */
-        .battle-ui { width: 95%; max-width: 500px; background: #f8f8f8; color: #333; border: 4px solid #555; border-radius: 10px; padding: 15px; text-align: left; }
+        .battle-ui { width: 95%; max-width: 550px; background: #f8f8f8; color: #333; border: 4px solid #555; border-radius: 10px; padding: 15px; text-align: left; }
         .hp-bar { height: 12px; background: #ccc; border: 2px solid #333; width: 100%; margin: 5px 0; }
         .hp-fill { height: 100%; background: #4caf50; transition: width 0.3s; }
-        .battle-text { height: 70px; font-size: 8px; color: #000; background: #fff; padding: 10px; border: 2px solid #333; margin-top: 10px; overflow-y: hidden; }
+        .battle-text { height: 70px; font-size: 8px; color: #000; background: #fff; padding: 10px; border: 2px solid #333; margin-top: 10px; }
 
-        /* Mini-jeu Bisou */
         #kiss-zone { width: 300px; height: 180px; border: 4px dashed #ff00ea; position: relative; margin: 20px; background: rgba(255,0,234,0.1); }
         .papa-icon { position: absolute; right: 10px; top: 10px; font-size: 18px; transition: 0.2s; }
         
-        .wild-appear { animation: pokeAppear 0.6s ease-out; }
         .flowers-bg { background: #601a35; }
         .beach-bg { background: linear-gradient(#1e90ff, #f0e68c); }
         .warning { background: #ff4d4d !important; }
         
-        @keyframes pokeAppear { 0% { transform: scale(0) rotate(-10deg); } 100% { transform: scale(1) rotate(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -63,28 +62,15 @@ const tanguyLines = [
     "Tanguy : 'On fait une séance pecs après le duel ?'",
     "Tanguy rougit : 'C'est criminel d'être aussi imposant !'",
     "Tanguy : 'Ton armure est si serrée... j'adore !'",
-    "Tanguy : 'Je fais des pompes chaque soir en pensant à toi !'",
     "Tanguy : 'Tu me barres l'horizon, et j'aime ça !'"
 ];
 
 const scenes = [
     { // 0. ORIGINES
-        content: `
-            <div class="dialogue">
-                Né en Allemagne et élevé à Brive, Tyron porte un héritage puissant.<br><br>
-                De son père, il tient la rigueur et la précision venue de <b>Chine</b>. 
-                Ses racines <b>Philippines</b> viennent de sa mère... <br><br>
-                (On passe vite, elle n'était pas sympa).<br><br>
-                C'est un colosse au mental d'acier !
-            </div>`
+        content: `<div class="dialogue">Né en Allemagne et élevé à Brive, Tyron porte un héritage puissant.<br><br>De son père, il tient la rigueur venue de <b>Chine</b>. De sa mère, les racines <b>Philippines</b>.<br><br>C'est un colosse au mental d'acier !</div>`
     },
     { // 1. LA GUILDE
-        content: `
-            <div class="img-box"><img src="tyron.png" onerror="this.parentElement.innerHTML='[IMAGE TYRON]'"></div>
-            <div class="dialogue">
-                À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
-                Pas encore ingénieur, mais déjà un leader naturel !
-            </div>`
+        content: `<div class="img-box"><img src="tyron.png" onerror="this.parentElement.innerHTML='[IMAGE TYRON]'"></div><div class="dialogue">À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>Leader naturel !</div>`
     },
     { // 2. COMBAT TANGUY
         id: "battle-tanguy",
@@ -92,7 +78,7 @@ const scenes = [
             <div class="battle-ui">
                 <p style="font-size:7px">SORCIER TANGUY (Niv. 25)</p>
                 <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%"></div></div>
-                <div style="text-align:center"><img src="tanguy.png" style="width:90px;" onerror="this.style.display='none'"></div>
+                <div style="text-align:center"><img src="tanguy.png" class="img-battle-large" onerror="this.parentElement.innerHTML='<div style=font-size:40px>🧙‍♂️</div>'"></div>
                 <p style="font-size:7px; text-align:right">TYRON (Niv. 25)</p>
                 <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
                 <div id="battleText" class="battle-text">TANGUY veut se battre !</div>
@@ -104,49 +90,37 @@ const scenes = [
                 </div>
             </div>`
     },
-    { // 3. VOYAGE
+    { // 3. VOYAGE (Logique sélective)
         bg: "beach-bg",
         content: `
             <div class="dialogue">Philippines vs Madrid.<br>Tyron doit choisir son style Dress to Impress !</div>
             <div id="dress-area">
-                <button onclick="next()">MAILLOT CLASSIQUE</button>
-                <button onclick="alert('STYLE PIXEL ABSOLU !'); next()">PERRUQUE ROSE & GANTS</button>
-                <button onclick="next()">TORSE NU HUILÉ</button>
+                <button onclick="alert('C\'est un peu trop simple pour elle...')">MAILLOT CLASSIQUE</button>
+                <button onclick="alert('STYLE PIXEL ABSOLU ! C\'est validé !'); next()">PERRUQUE ROSE & ROBE</button>
+                <button onclick="alert('Le sorcier Tanguy aurait peut-être aimé... mais pas elle !')">CORPS NU HUILÉ</button>
             </div>`
     },
     { // 4. APPARITION PRINCESSE
         bg: "flowers-bg",
-        content: `
-            <div class="wild-appear">
-                <img src="princesse.png" class="img-box" style="border-radius:50%; border:8px solid gold;" onerror="this.parentElement.innerHTML='[IMAGE PRINCESSE]'">
-            </div>
-            <div class="dialogue" style="background:white; color:black;">
-                <p><b>UN COUP DE FOUDRE SAUVAGE APPARAÎT !</b></p><br>
-                La Princesse aux cheveux roux et yeux verts vous a percuté !
-            </div>`
+        content: `<div class="img-box" style="border-radius:50%; border:8px solid gold;"><img src="princesse.png" onerror="this.parentElement.innerHTML='[IMAGE PRINCESSE]'"></div><div class="dialogue"><b>UN COUP DE FOUDRE SAUVAGE !</b><br>La Princesse Rousse vous a percuté !</div>`
     },
     { // 5. LA RENCONTRE
         bg: "flowers-bg",
-        content: `
-            <div class="dialogue">Tyron sent son armure se fendre face à ce regard émeraude.<br>Le colosse est tombé amoureux.</div>`
+        content: `<div class="dialogue">Le temps s'arrête devant le parvis de l'église. Tyron est conquis.</div>`
     },
     { // 6. LA SORCIERE
-        content: `
-            <div class="img-box"><img src="sorciere.png" onerror="this.parentElement.innerHTML='[IMAGE SORCIERE]'"></div>
-            <div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;">
-                <b>DRAME !</b> La Sorcière Violette a empoisonné la Princesse avec un <b>croissant aux amandes</b> !<br>FOUTUES ALLERGIES !
-            </div>`
+        content: `<div class="img-box"><img src="sorciere.png" onerror="this.parentElement.innerHTML='[IMAGE SORCIERE]'"></div><div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;"><b>DRAME !</b> Elle a utilisé un <b>croissant aux amandes</b> !</div>`
     },
-    { // 7. LE DRAGON DE LA TRISTESSE
+    { // 7. LE DRAGON (Correction boutons)
         id: "battle-dragon",
         content: `
             <div class="battle-ui">
                 <p style="font-size:7px; color:red;">DRAGON DE LA TRISTESSE</p>
                 <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%; background:red;"></div></div>
-                <div style="text-align:center; font-size:40px;">🐲</div>
-                <p style="font-size:7px; text-align:right">TYRON (PRÊT AU COMBAT)</p>
+                <div style="text-align:center"><img src="dragon.png" class="img-battle-large" onerror="this.parentElement.innerHTML='<div style=font-size:40px>🐲</div>'"></div>
+                <p style="font-size:7px; text-align:right">TYRON</p>
                 <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
-                <div id="battleText" class="battle-text">Le Dragon barre la route vers la Princesse !</div>
+                <div id="battleText" class="battle-text">Le Dragon barre la route !</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr;">
                     <button onclick="fight('kick', 'dragon')">ULTIME KICK</button>
                     <button onclick="fight('whey', 'dragon')">WHEY (+PV)</button>
@@ -155,24 +129,16 @@ const scenes = [
     },
     { // 8. MINI-JEU BISOU
         content: `
-            <div class="dialogue">VITE ! RÉVEILLE-LA !<br>(Maintiens le bouton, attention au Papa !)</div>
+            <div class="dialogue">RÉVEILLE-LA ! (Maintiens le bouton, attention au Papa !)</div>
             <div id="kiss-zone">
                 <div id="papa" class="papa-icon">👴💤</div>
-                <div style="position:absolute; bottom:10px; width:100%; padding:0 10px;">
-                    AMOUR : <div class="hp-bar"><div id="love-fill" class="hp-fill" style="width:0%; background:#ff00ea;"></div></div>
-                </div>
+                <div style="position:absolute; bottom:10px; width:100%; padding:0 10px;">AMOUR : <div class="hp-bar"><div id="love-fill" class="hp-fill" style="width:0%; background:#ff00ea;"></div></div></div>
             </div>
             <button onmousedown="startKiss()" onmouseup="stopKiss()" onmouseleave="stopKiss()">EMBRASSER 💋</button>`
     },
     { // 9. FINAL
         bg: "flowers-bg",
-        content: `
-            <div class="dialogue" style="border:8px double gold;">
-                👑 <b>FÉLICITATIONS TYRON !</b> 👑<br><br>
-                Le Dragon est vaincu et la Princesse est réveillée.<br><br>
-                🎁 <b>TON CADEAU :</b><br>LA MONTRE DE SPORT MYTHIQUE !<br><br>
-                ✨ <b>JOYEUX ANNIVERSAIRE !</b> ✨
-            </div>`
+        content: `<div class="dialogue" style="border:8px double gold;">👑 <b>FÉLICITATIONS TYRON !</b> 👑<br><br>Le Dragon est vaincu et la Princesse réveillée.<br><br>🎁 <b>CADEAU :</b> LA MONTRE DE SPORT MYTHIQUE !<br><br>✨ <b>JOYEUX ANNIVERSAIRE !</b> ✨</div>`
     }
 ];
 
@@ -181,42 +147,35 @@ function render() {
     let s = scenes[currentScene];
     game.className = s.bg || "";
     game.innerHTML = `<div class="scene active">${s.content}${shouldShowBtn() ? '<br><button onclick="next()">CONTINUER</button>' : ''}</div>`;
-    if(currentScene === 2 || currentScene === 7) { enemyHP = 150; playerHP = 100; updateBars(); }
+    if(currentScene === 2 || currentScene === 7) { enemyHP = 150; playerHP = 100; isBusy = false; }
     if(currentScene === 8) initKissGame();
 }
 
 function shouldShowBtn() { return ![2, 3, 7, 8].includes(currentScene); }
 function next() { currentScene++; if(currentScene < scenes.length) render(); }
 
-// --- COMBAT ---
 function fight(move, type) {
     if(isBusy) return; isBusy = true;
     const txt = document.getElementById("battleText");
-    
     if(move === 'kick') { enemyHP -= 50; txt.innerText = "Tyron frappe fort !"; }
-    else if(move === 'regard') { enemyHP -= 60; txt.innerText = "Le regard de Tyron déstabilise l'adversaire !"; }
+    else if(move === 'regard') { enemyHP -= 60; txt.innerText = "Tyron utilise son charisme !"; }
     else if(move === 'whey') { playerHP = Math.min(100, playerHP + 50); txt.innerText = "Tyron récupère avec sa WHEY !"; }
-    else if(move === 'fuite') { txt.innerText = "Impossible de fuir le charisme de Tanguy !"; }
-
+    else if(move === 'fuite') { txt.innerText = "Pas de fuite possible !"; }
     updateBars();
-
     setTimeout(() => {
         if(enemyHP <= 0) { txt.innerText = "VICTOIRE !"; setTimeout(next, 1200); }
         else {
-            if(type === 'tanguy') txt.innerText = tanguyLines[Math.floor(Math.random()*tanguyLines.length)];
-            else txt.innerText = "Le Dragon riposte avec des flammes de tristesse !";
-            playerHP -= 15;
-            updateBars();
-            isBusy = false;
+            txt.innerText = (type === 'tanguy') ? tanguyLines[Math.floor(Math.random()*tanguyLines.length)] : "Le Dragon crache des flammes !";
+            playerHP -= 15; updateBars(); isBusy = false;
         }
     }, 1000);
 }
+
 function updateBars() {
     if(document.getElementById("eHP")) document.getElementById("eHP").style.width = (enemyHP/150*100) + "%";
     if(document.getElementById("pHP")) document.getElementById("pHP").style.width = playerHP + "%";
 }
 
-// --- BISOU (ACCÉLÉRÉ) ---
 let kissInterval;
 function initKissGame() {
     setInterval(() => {
@@ -227,14 +186,8 @@ function initKissGame() {
 }
 function startKiss() {
     kissInterval = setInterval(() => {
-        if(papaLooking) { 
-            kissProgress = Math.max(0, kissProgress - 5);
-            document.body.classList.add("warning"); 
-        } else { 
-            kissProgress += 4; // Plus rapide
-            document.body.classList.remove("warning");
-            if(kissProgress >= 100) { clearInterval(kissInterval); next(); }
-        }
+        if(papaLooking) { kissProgress = Math.max(0, kissProgress - 5); document.body.classList.add("warning"); }
+        else { kissProgress += 4; document.body.classList.remove("warning"); if(kissProgress >= 100) { clearInterval(kissInterval); next(); } }
         document.getElementById("love-fill").style.width = kissProgress + "%";
     }, 80);
 }

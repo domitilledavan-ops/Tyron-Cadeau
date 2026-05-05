@@ -30,23 +30,23 @@
       text-align: center;
       padding: 30px;
       animation: fadeIn 1s ease-in-out;
-      z-index: 5; /* Texte au-dessus des fleurs */
+      z-index: 5;
     }
 
     .active { display: flex; }
 
     .dialogue {
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.9);
       border: 4px solid white;
       padding: 20px;
       max-width: 90%;
-      line-height: 1.8;
+      line-height: 1.6;
       font-size: 11px;
-      margin-top: 20px;
+      margin-top: 15px;
     }
 
     button {
-      margin-top: 10px;
+      margin: 8px;
       padding: 12px;
       font-family: inherit;
       background: yellow;
@@ -55,60 +55,49 @@
       font-size: 9px;
     }
 
-    button:hover { background: orange; transform: scale(1.05); }
+    button:hover { background: orange; transform: scale(1.02); }
 
-    /* NOUVELLE NARRATION DÉFILANTE */
+    /* NARRATION DÉFILANTE */
     .crawl-container {
-      width: 80%; height: 60%;
-      perspective: 400px;
+      width: 80%; height: 50%;
+      perspective: 300px;
       overflow: hidden;
+      margin-bottom: 20px;
     }
     .crawl-content {
       position: relative;
-      top: 100%;
-      animation: crawl 20s linear forwards;
+      animation: crawl 25s linear forwards;
       color: #ffb6c1;
-      line-height: 2;
-      font-size: 14px;
+      font-size: 13px;
       text-align: center;
     }
     @keyframes crawl {
-      0% { top: 100%; transform: rotateX(20deg) translateY(0); }
-      100% { top: -150%; transform: rotateX(20deg) translateY(-500px); }
+      0% { top: 100%; transform: rotateX(15deg); }
+      100% { top: -180%; transform: rotateX(15deg); }
     }
 
     /* DÉCORS */
-    .flowers-bg { background: #601a35; position: relative; overflow: hidden; }
-    .flower {
-      position: absolute; font-size: 30px; z-index: 1;
-      animation: float 4s infinite ease-in-out;
-    }
-
-    .beach-bg { background: linear-gradient(to bottom, #4da6ff 60%, #ffd700 60%); }
+    .flowers-bg { background: #4a142c; position: relative; overflow: hidden; }
+    .flower { position: absolute; font-size: 30px; z-index: 1; animation: float 4s infinite ease-in-out; }
+    .beach-bg { background: linear-gradient(to bottom, #2980b9 60%, #f1c40f 60%); }
     .palm { position: absolute; bottom: 40%; font-size: 70px; z-index: 1; }
-    .crab { position: absolute; bottom: 10%; font-size: 25px; animation: crabWalk 6s infinite linear; z-index: 1; }
+    .crab { position: absolute; bottom: 10%; font-size: 25px; animation: crabWalk 8s infinite linear; z-index: 1; }
 
     @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-30px) rotate(45deg); } }
     @keyframes crabWalk { 0% { left: -10%; } 100% { left: 110%; } }
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 
     /* PERSOS */
-    .character-container { display: flex; justify-content: center; align-items: center; gap: 60px; margin-top: 20px; }
-    .tyron, .princess { position: relative; width: 120px; height: 180px; animation: bounce 1s infinite alternate; }
-    
-    .tyron .head { width: 50px; height: 50px; background: #f2c28b; position: absolute; top: 20px; left: 35px; border: 4px solid black; }
-    .tyron .hat { width: 70px; height: 30px; background: #228b22; position: absolute; top: 0; left: 25px; border: 4px solid black; }
-    .tyron .body { width: 80px; height: 80px; background: #228b22; position: absolute; top: 70px; left: 20px; border: 4px solid black; }
-
-    .princess .hair { width: 90px; height: 90px; background: #ff4500; position: absolute; top: 5px; left: 15px; border: 4px solid black; border-radius: 50% 50% 0 0; }
-    .princess .head { width: 50px; height: 50px; background: #f2c28b; position: absolute; top: 25px; left: 35px; border: 4px solid black; }
-    .princess .body { width: 80px; height: 90px; background: #ff69b4; position: absolute; top: 75px; left: 20px; border: 4px solid black; }
+    .character-container { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 10px; }
+    .tyron { position: relative; width: 100px; height: 160px; animation: bounce 1s infinite alternate; }
+    .tyron .head { width: 50px; height: 50px; background: #f2c28b; position: absolute; top: 20px; left: 25px; border: 3px solid black; }
+    .tyron .body { width: 70px; height: 75px; background: #228b22; position: absolute; top: 70px; left: 15px; border: 3px solid black; }
 
     /* BATTLE UI */
-    .battle-ui { border: 4px solid white; padding: 15px; width: 95%; background: #1a1a2e; }
-    .hp-box { display: flex; justify-content: space-between; font-size: 9px; margin-bottom: 5px; }
-    .hp-bar { width: 100px; height: 10px; background: red; border: 1px solid white; }
-    .hp-fill { height: 100%; background: lime; transition: width 0.3s; }
+    .battle-ui { border: 4px solid white; padding: 15px; width: 95%; background: #0f0f1b; }
+    .hp-box { display: flex; justify-content: space-between; font-size: 8px; margin-bottom: 5px; }
+    .hp-bar { width: 90px; height: 10px; background: #440000; border: 1px solid white; }
+    .hp-fill { height: 100%; background: #00ff00; transition: width 0.5s; }
   </style>
 </head>
 <body>
@@ -117,40 +106,45 @@
 
 <script>
 let currentScene = 0;
-let enemyHP = 120;
+let enemyHP = 150;
 let playerHP = 100;
-let dragonHP = 12;
+let dragonHP = 15;
+let isAttacking = false;
+
+// Variables Dress to Impress
+let hasWig = false;
+let hasGloves = false;
+let hasOutfit = false;
 
 const scenes = [
 {
   bg: 'stars',
   content: `
-    <div style="color:yellow; text-shadow:2px 2px red; line-height:1.5;">
-      DANS UNE GALAXIE... ENFIN, À LILLE...<br><br>
-      Le 6 mai 2003 naquit Tyron. Un colosse au regard d'acier, mélange rare de force brute et de finesse chinoise.<br><br>
-      Aussi imposant qu'un boxeur thaï en plein "Nak Muay", il cache derrière ses muscles un cœur plus sensible qu'une fin de film Disney.<br><br>
-      Tyron : l'homme qui peut te mettre un high-kick, puis pleurer devant un coucher de soleil sur les Philippines.
+    <div style="color:yellow; text-shadow:2px 2px red; line-height:1.6;">
+      Il était une fois, un héros aux origines vastes...<br><br>
+      Né sous le ciel d'Allemagne, Tyron a forgé son caractère dans les terres de Brive.<br>
+      Un mélange unique de rigueur germanique et de chaleur corrézienne.<br><br>
+      Dès son plus jeune âge, il dégageait une aura de puissance. Un colosse au regard calme, mais dont les poings connaissent la foudre de la boxe thaï.<br><br>
+      Mais sous cette armure de muscles se cache un secret : Tyron possède une sensibilité si pure qu'il peut s'émouvoir devant la beauté d'une simple ligne de code bien écrite.
     </div>`
 },
 {
   content: `
     <div class="character-container">
-      <div class="tyron">
-        <div class="hat"></div><div class="head"></div><div class="body"></div>
-      </div>
+      <div class="tyron"><div class="head"></div><div class="body"></div></div>
     </div>
     <div class="dialogue">
-      Tyron recruta sa première guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
-      Leur amitié est si forte qu'elle survit aux pires séances de shadow boxing de Tyron dans le salon et à ses moments de "grande émotion" après deux bières.<br><br>
-      Le groupe est solide, mais personne n'ose lui dire qu'il chante mal sous la douche.
+      Le Chevalier Tyron ne voyage jamais seul. Il s'entoure de sa guilde fidèle : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
+      C'est avec eux qu'il a appris que la vraie force n'est pas dans le punch, mais dans le rire partagé après l'effort.<br><br>
+      Même si sa stature en impose et impose le respect, il reste celui qui écoute, qui conseille et qui, parfois, se laisse emporter par l'émotion d'un moment d'amitié sincère.
     </div>`
 },
 {
   content: `
     <div class="dialogue">
-      L'ICAM. Le temple du savoir... et des problèmes.<br><br>
-      Soudain, <b>TANGUY LE SORCIER</b> barre la route !<br>
-      "Tyron ! Tes origines philippines te donnent du style, mais ma magie va briser ton mental de boxeur !"
+      Sa quête de savoir le mène aux portes de l'ICAM. Mais le chemin est gardé par une force mystérieuse...<br><br>
+      <b>TANGUY LE SORCIER</b> surgit dans un nuage de vapeur de magnésie !<br>
+      "Tyron ! Ton passé à Brive ne te servira à rien ici ! Ma magie mentale va tester ta volonté !"
     </div>`
 },
 {
@@ -158,39 +152,39 @@ const scenes = [
   content: `
     <div class="battle-ui">
       <div class="hp-box">
-        <div>TYRON (Guerrier Sensible): <div class="hp-bar"><div class="hp-fill" id="pHP" style="width:100%"></div></div></div>
-        <div>TANGUY (Mage Protéiné): <div class="hp-bar"><div class="hp-fill" id="eHP" style="width:100%"></div></div></div>
+        <div>TYRON (Colosse de Brive): <div class="hp-bar"><div class="hp-fill" id="pHP" style="width:100%"></div></div></div>
+        <div>TANGUY (Mage de l'ICAM): <div class="hp-bar"><div class="hp-fill" id="eHP" style="width:100%"></div></div></div>
       </div>
-      <div style="font-size:50px;">🧙‍♂️⚡</div>
-      <p id="log" style="font-size:9px; height:30px; margin:10px 0;">Tanguy prépare un sort de 'Lassitude' !</p>
+      <div style="font-size:50px;">🧙‍♂️✨</div>
+      <p id="log" style="font-size:9px; height:40px; margin:10px 0; color: cyan;">Tanguy vous observe avec défi...</p>
       <div id="btns">
-        <button onclick="fight('kick')">HIGH-KICK THAÏ</button>
-        <button onclick="fight('math')">INTÉGRALE DE FORCE</button>
-        <button onclick="fight('tears')">LARME DE SENSIBILITÉ</button>
-        <button onclick="fight('whey')" style="background:white">BOIRE WHEY (+30HP)</button>
+        <button onclick="fight('thai')">KICK DE MUAY THAÏ</button>
+        <button onclick="fight('brive')">FORCE CORRÉZIENNE</button>
+        <button onclick="fight('heart')">SENSIBILITÉ BRUTE</button>
+        <button onclick="fight('whey')" style="background:white">WHEY DE RÉCUPÉRATION</button>
       </div>
     </div>`
 },
 {
   content: `
     <div class="dialogue">
-      Tanguy s'enfuit, terrassé par le charisme de Tyron !<br><br>
-      Notre héros rejoint ses nouveaux frères d'armes ICAM : Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan et Quentin.<br><br>
-      Une équipe prête à tout, surtout à finir les restes de nems de Tyron après l'entraînement.
+      Le combat fut rude, mais la noblesse de Tyron a triomphé. Tanguy, impressionné par un tel mélange de force et de cœur, lui laisse le passage.<br><br>
+      Tyron rejoint alors ses nouveaux alliés de l'ICAM : Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan et Quentin.<br><br>
+      Une nouvelle famille d'ingénieurs prête à affronter les nuits de calculs et les journées de conception, avec Tyron comme pilier inébranlable.
     </div>`
 },
 {
   bg: 'flowers-bg',
   content: `
     <div class="flower" style="top:10%; left:5%;">🌸</div>
-    <div class="flower" style="top:40%; right:10%;">🌷</div>
-    <div class="flower" style="bottom:15%; left:20%;">🌹</div>
+    <div class="flower" style="top:40%; right:15%;">🌷</div>
     <div class="crawl-container">
       <div class="crawl-content">
-        🌻<br>Le destin frappa à la porte de l'église...<br>🌺<br>
-        Tyron, le colosse sensible,<br>percuta une vision de rêve...<br>🌼<br>
-        Une Princesse Rousse aux yeux verts,<br>plus éclatante qu'une victoire par KO.<br>🌷<br>
-        Leur amour commença là,<br>entre deux prières et un sourire.<br>🌸
+        🌻<br>Le destin attendait sur le parvis...<br>🌺<br>
+        Tyron, l'homme à la stature de géant,<br>sentit son cœur flancher.<br>🌼<br>
+        Une Princesse Rousse aux yeux verts,<br>croisa son chemin devant l'église.<br>🌷<br>
+        Lui qui n'avait peur de rien sur un ring,<br>se trouva désarmé par un simple regard.<br>🌸<br>
+        La plus belle de toutes les quêtes<br>venait de commencer.<br>🌹
       </div>
     </div>`
 },
@@ -199,37 +193,35 @@ const scenes = [
   content: `
     <div class="palm" style="left:5%;">🌴</div><div class="crab">🦀</div>
     <div class="dialogue">
-      Le destin les sépare ! Madrid vs Philippines.<br><br>
-      Tyron, entre deux entraînements de boxe sur le sable fin, réalise que son look "ingénieur-boxeur" a besoin d'un upgrade pour conquérir le monde.<br><br>
-      Il est temps de montrer que les Philippins ont le meilleur sens du style du monde !
+      La vie les sépare temporairement. Elle s'envole vers Madrid, il part pour les Philippines.<br><br>
+      Sur les plages lointaines, Tyron s'entraîne sans relâche. Mais il sait que pour retrouver sa princesse, la force ne suffit pas : il lui faut un style mémorable, un charisme qui traverse les océans !
     </div>
-    <button onclick="dressGame()">COMMENCER DRESS TO IMPRESS</button>`
+    <button onclick="dressGame()">DRESS TO IMPRESS</button>`
 },
 {
   content: `
     <div class="dialogue">
-      HORREUR ! La Sorcière Violette a frappé par jalousie !<br><br>
-      Elle a glissé un poison dans un croissant aux amandes (le point faible de toute princesse).<br><br>
-      Seule la défaite du Dragon de la Tristesse peut la réveiller !
+      Tragédie ! La Sorcière Violette, jalouse de cet amour pur, a ensorcelé un croissant aux amandes.<br><br>
+      La Princesse est plongée dans un sommeil mélancolique. Tyron doit puiser dans sa force apprise en Allemagne et son courage de Brive pour briser le sort !
     </div>`
 },
 {
   content: `
     <div class="dragon" id="dragon" style="font-size:80px;">🐉</div>
     <div class="dialogue">
-      VITE ! Utilise ta force de boxeur thaï !<br>Clique sur le bouton pour sauver ton amour !
+      Le Dragon de la Tristesse protège le remède !<br>Utilise ta puissance de Nak Muay pour le vaincre !
     </div>
-    <button id="atk-btn">🥊 BOXER LE DRAGON (<span id="dHP">12</span>)</button>`
+    <button id="atk-btn">🥊 ENCHAÎNEMENT DE BOXE (<span id="dHP">15</span>)</button>`
 },
 {
   bg: 'stars',
   content: `
-    <div style="color:yellow; text-shadow:2px 2px pink;">
-      👑 MARIAGE DE LÉGENDE 👑<br><br>
-      Tyron et sa Princesse ont triomphé !<br><br>
-      Il a prouvé qu'on peut être un colosse chinois-philippin, champion de boxe, génie de l'ICAM et rester l'homme le plus sensible et aimant du royaume.<br><br>
-      <b>OBJET OBTENU :</b> LA MONTRE DE SPORT ÉTERNELLE.<br><br>
-      FIN (BRAVO TYRON !)
+    <div style="color:yellow; text-shadow:2px 2px pink; line-height: 1.5;">
+      👑 L'UNION DES MONDES 👑<br><br>
+      Le Dragon est vaincu, le sort est rompu.<br><br>
+      Tyron l'Allemand, l'enfant de Brive, le boxeur au cœur tendre, a prouvé que la vraie virilité réside dans la capacité à protéger ceux qu'on aime avec douceur.<br><br>
+      <b>RÉCOMPENSE :</b> LA MONTRE DE SPORT ÉTERNELLE ET UN AMOUR INFINI.<br><br>
+      JOYEUX ANNIVERSAIRE TYRON !
     </div>`
 }
 ];
@@ -249,41 +241,74 @@ function shouldShowBtn() {
 function nextScene() { currentScene++; renderScene(); }
 
 function fight(type) {
+  if(isAttacking) return;
+  isAttacking = true;
   const log = document.getElementById("log");
-  if(type === 'kick') { enemyHP -= 30; log.innerText = "KICK DANS LES CÔTES ! Tanguy perd 30 PV !"; }
-  if(type === 'math') { enemyHP -= 25; log.innerText = "Calcul complexe ! Tanguy a mal au crâne (-25 PV) !"; }
-  if(type === 'tears') { enemyHP -= 40; log.innerText = "Tyron pleure de sincérité... Tanguy est déstabilisé (-40 PV) !"; }
-  if(type === 'whey') { playerHP = Math.min(100, playerHP + 30); log.innerText = "Shaker de force ! Tyron reprend 30 PV !"; }
+  
+  if(type === 'thai') { enemyHP -= 25; log.innerText = "Tyron assène un middle-kick dévastateur !"; }
+  else if(type === 'brive') { enemyHP -= 35; log.innerText = "Puissance de Brive ! Tanguy recule de trois pas !"; }
+  else if(type === 'heart') { enemyHP -= 45; log.innerText = "Tyron dévoile sa grande sensibilité... Tanguy pleure !"; }
+  else if(type === 'whey') { playerHP = Math.min(100, playerHP + 40); log.innerText = "Tyron récupère avec un shaker de Whey pure !"; }
 
-  if(enemyHP <= 0) return nextScene();
-
+  updateBars();
+  
+  // Temps de réaction prolongé pour Tanguy
   setTimeout(() => {
-    const power = Math.floor(Math.random() * 3);
-    if(power === 0) { playerHP -= 15; log.innerText = "Tanguy lance 'PROJET EN RETARD' (-15 PV) !"; }
-    else if(power === 1) { playerHP -= 20; log.innerText = "Tanguy utilise 'SÉANCE CARDIO' (-20 PV) !"; }
-    else { playerHP -= 10; log.innerText = "Tanguy critique ton style (-10 PV) !"; }
-    
-    document.getElementById("pHP").style.width = playerHP + "%";
-    document.getElementById("eHP").style.width = (enemyHP/120*100) + "%";
-    
-    if(playerHP <= 0) { alert("Tyron a trop pleuré... il a perdu !"); location.reload(); }
-  }, 600);
+    if(enemyHP <= 0) {
+      log.innerText = "Tanguy : 'Incroyable... tant de muscles et tant d'émotion...'";
+      setTimeout(nextScene, 2000);
+    } else {
+      const moves = ["Tanguy lance 'ERREUR DE SYNTAXE' !", "Tanguy utilise 'SÉANCE JAMBES' !", "Tanguy invoque 'RÉSISTANCE AU CHARISME' !"];
+      const move = moves[Math.floor(Math.random()*moves.length)];
+      playerHP -= 15;
+      log.innerText = move;
+      updateBars();
+      isAttacking = false;
+      if(playerHP <= 0) { alert("Tyron doit se reposer..."); location.reload(); }
+    }
+  }, 1500);
+}
+
+function updateBars() {
+  document.getElementById("pHP").style.width = playerHP + "%";
+  document.getElementById("eHP").style.width = (enemyHP/150*100) + "%";
 }
 
 function dressGame() {
   const game = document.getElementById("game");
   game.innerHTML = `<div class="scene active beach-bg">
-    <div class="dialogue">Le look ultime du boxeur philippin :</div>
-    <button onclick="alert('Trop classique pour un BG comme Tyron')">Short de sport</button>
-    <button onclick="alert('CHARISME EXPLOSIF !'); nextScene();">LA PERRUQUE ROSE</button>
+    <div class="dialogue" id="dress-msg">Compose le style ultime du Chevalier Sensible :</div>
+    <div id="dress-status" style="font-size:8px; margin:10px;">
+      [${hasOutfit?'TENUE OK':'...'} ] [${hasGloves?'GANTS OK':'...'} ] [${hasWig?'PERRUQUE OK':'...'} ]
+    </div>
+    <div id="dress-btns">
+      <button onclick="pick('outfit')">Short Muay Thaï Soyeux</button>
+      <button onclick="pick('gloves')">Gants de Boxe Roses</button>
+      <button onclick="pick('wig')">PERRUQUE ROSE LÉGENDAIRE</button>
+    </div>
+    <button id="valid-btn" style="display:none; background:lime;" onclick="nextScene()">VALIDER LE LOOK</button>
   </div>`;
+}
+
+function pick(item) {
+  if(item === 'outfit') hasOutfit = true;
+  if(item === 'gloves') hasGloves = true;
+  if(item === 'wig') hasWig = true;
+  
+  const msg = document.getElementById("dress-msg");
+  if(hasOutfit && hasGloves && hasWig) {
+    msg.innerText = "STYLE ABSOLU ! Tyron en impose avec douceur !";
+    document.getElementById("valid-btn").style.display = "inline-block";
+  }
+  // On rafraîchit l'affichage sans recharger la scène
+  document.getElementById("dress-status").innerHTML = `[${hasOutfit?'TENUE OK':'...'} ] [${hasGloves?'GANTS OK':'...'} ] [${hasWig?'PERRUQUE OK':'...'} ]`;
 }
 
 function attackDragon() {
   dragonHP--;
   document.getElementById("dHP").innerText = dragonHP;
-  document.getElementById("dragon").style.transform = "scale(1.3) rotate(5deg)";
-  setTimeout(() => { if(document.getElementById("dragon")) document.getElementById("dragon").style.transform = "scale(1)"; }, 100);
+  document.getElementById("dragon").style.transform = "scale(1.2) rotate(10deg)";
+  setTimeout(() => { if(document.getElementById("dragon")) document.getElementById("dragon").style.transform = "scale(1)"; }, 150);
   if(dragonHP <= 0) nextScene();
 }
 

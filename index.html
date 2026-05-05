@@ -24,7 +24,7 @@
 
         .img-battle-large { width: 180px !important; height: auto; margin: 10px 0; }
 
-        .dialogue { background: rgba(0,0,0,0.9); border: 4px solid #fff; padding: 15px; max-width: 85%; line-height: 1.6; font-size: 10px; margin-top: 15px; }
+        .dialogue { background: rgba(0,0,0,0.9); border: 4px solid #fff; padding: 15px; max-width: 85%; line-height: 1.6; font-size: 10px; margin-top: 15px; text-align: left; }
         button { margin: 10px; padding: 12px; font-family: inherit; background: #ffea00; border: 3px solid #000; cursor: pointer; font-size: 8px; }
         button:hover { background: #fff; }
 
@@ -56,36 +56,36 @@ let kissProgress = 0;
 let papaLooking = false;
 
 const tanguyLines = [
-    "Tanguy admire tes pecs en secret...",
-    "Tanguy : 'Frappe-moi encore Tyron, ta force m'éblouit !'",
-    "Tanguy : 'On fait une séance pecs après le duel ?'",
-    "Tanguy rougit : 'C'est criminel d'être aussi imposant !'",
-    "Tanguy : 'Ton armure est si serrée... j'adore !'",
-    "Tanguy : 'Je fais des pompes chaque soir en pensant à toi !'",
-    "Tanguy : 'Tu me barres l'horizon, et j'aime ça !'"
+    "Tanguy : 'Frappe-moi encore Tyron, ton charisme m'éblouit !'",
+    "Tanguy rougit : 'C'est criminel d'avoir des dorsaux pareils...'",
+    "Tanguy : 'Est-ce que tu penses à moi pendant tes tractions ?'",
+    "Tanguy : 'Ta rigueur chinoise me rend tout chose...'",
+    "Tanguy : 'Si je gagne, on partage un shaker en tête-à-tête ?'",
+    "Tanguy : 'Tu es le seul ingénieur qui fait battre mon cœur !'",
+    "Tanguy : 'Vise le torse, Tyron... j'aime quand tu es direct !'"
 ];
 
 const scenes = [
     { 
-        content: `<div class="dialogue">Né en Allemagne et élevé à Brive, Tyron porte un héritage puissant.<br><br>De son père, il tient la rigueur venue de <b>Chine</b>. De sa mère, les racines <b>Philippines</b>.<br><br>C'est un colosse au mental d'acier !</div>`
+        content: `<div class="dialogue"><b>L'HÉRITAGE DU CHEVALIER</b><br><br>Né sous le ciel d'Allemagne et forgé dans les terres de Brive, Tyron est le fruit d'un mélange explosif.<br><br>De son père, il a hérité de la <b>Rigueur Chinoise</b> et d'un sens du devoir implacable. Quant à ses racines <b>Philippines</b>... disons que c'est complexe.<br><br>On ne va pas s'attarder sur sa génitrice, car elle n'était pas très sympa. Mais Tyron a prouvé sa force mentale légendaire en prenant ses distances. Un vrai colosse ne se laisse pas abattre par le passé !</div>`
     },
     { 
-        content: `<div class="img-box"><img src="tyron.png" onerror="this.parentElement.innerHTML='[IMAGE TYRON]'"></div><div class="dialogue">À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>Leader naturel !</div>`
+        content: `<div class="img-box"><img src="tyron.png" onerror="this.parentElement.innerHTML='[IMAGE TYRON]'"></div><div class="dialogue"><b>LA GUILDE DE BRIVE</b><br><br>Avant de devenir le futur ingénieur de l'ICAM, Tyron règne sur sa guilde briviste : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>Entre deux séances de boxe, il mène ses troupes avec une main de fer dans un gant de soie (et beaucoup de Whey). Mais un rival de taille se dresse sur sa route...</div>`
     },
     { 
         id: "battle-tanguy",
         content: `
             <div class="battle-ui">
-                <p style="font-size:7px">SORCIER TANGUY (Niv. 25)</p>
+                <p style="font-size:7px">SORCIER TANGUY (Secrètement Amoureux)</p>
                 <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%"></div></div>
                 <div style="text-align:center"><img src="tanguy.png" class="img-battle-large" onerror="this.parentElement.innerHTML='<div style=font-size:40px>🧙‍♂️</div>'"></div>
-                <p style="font-size:7px; text-align:right">TYRON (Niv. 25)</p>
+                <p style="font-size:7px; text-align:right">TYRON (Niv. 25 - Go Muscu)</p>
                 <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
-                <div id="battleText" class="battle-text">TANGUY veut se battre !</div>
+                <div id="battleText" class="battle-text">TANGUY bloque le passage ! Il veut ton attention (et peut-être un bisou) !</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr;">
                     <button onclick="fight('kick', 'tanguy')">KICK BOXE</button>
-                    <button onclick="fight('regard', 'tanguy')">REGARD INTENSE</button>
-                    <button onclick="fight('whey', 'tanguy')">WHEY (+PV)</button>
+                    <button onclick="fight('regard', 'tanguy')">CHARISME CHINOIS</button>
+                    <button onclick="fight('whey', 'tanguy')">WHEY MAGIQUE</button>
                     <button onclick="fight('fuite', 'tanguy')">FUITE</button>
                 </div>
             </div>`
@@ -93,23 +93,23 @@ const scenes = [
     { 
         bg: "beach-bg",
         content: `
-            <div class="dialogue">Philippines vs Madrid.<br>Tyron doit choisir son style Dress to Impress !</div>
+            <div class="dialogue"><b>L'ÉPREUVE DU STYLE : DRESS TO IMPRESS</b><br><br>Le destin appelle Tyron vers d'autres horizons : de Madrid aux Philippines.<br><br>Pour conquérir le cœur de sa dulcinée à distance, il doit valider son look. Choisissez avec soin, car la Princesse a des goûts... particuliers.</div>
             <div id="dress-area">
-                <button onclick="alert('C\\'est un peu trop simple pour elle...')">MAILLOT CLASSIQUE</button>
-                <button onclick="alert('STYLE PIXEL ABSOLU ! C\\'est validé !'); nextScene()">PERRUQUE ROSE & ROBE</button>
-                <button onclick="alert('Le sorcier Tanguy aurait peut-être aimé... mais pas elle !')">CORPS NU HUILÉ</button>
+                <button onclick="alert('Trop banal ! Tyron mérite plus d\\'extravagance !')">MAILLOT CLASSIQUE</button>
+                <button onclick="alert('LE LOOK ULTIME ! La perruque rose souligne tes trapèzes !'); nextScene()">PERRUQUE ROSE & ROBE</button>
+                <button onclick="alert('Tanguy le Sorcier aurait adoré... mais la Princesse trouve ça glissant !')">CORPS NU HUILÉ</button>
             </div>`
     },
     { 
         bg: "flowers-bg",
-        content: `<div class="img-box" style="border-radius:50%; border:8px solid gold; overflow:hidden;"><img src="princesse.png" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='[IMAGE PRINCESSE]'"></div><div class="dialogue"><b>UN COUP DE FOUDRE SAUVAGE !</b><br>La Princesse Rousse vous a percuté !</div>`
+        content: `<div class="img-box" style="border-radius:50%; border:8px solid gold; overflow:hidden;"><img src="princesse.png" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='[IMAGE PRINCESSE]'"></div><div class="dialogue"><b>L'APPARITION</b><br><br>Soudain, l'univers bascule. Un coup de foudre sauvage frappe Tyron en plein plexus !<br><br>Une chevelure rousse comme un coucher de soleil, des yeux verts perçants comme deux émeraudes... La Princesse est là, et le monde s'arrête de tourner.</div>`
     },
     { 
         bg: "flowers-bg",
-        content: `<div class="dialogue">Le temps s'arrête devant le parvis de l'église. Tyron est conquis.</div>`
+        content: `<div class="dialogue"><b>LE PARVIS DE L'AMOUR</b><br><br>Devant le parvis de l'église, le temps se fige. Tyron, le boxeur au cœur d'acier, sent son armure se briser.<br><br>Ce n'est pas un combat, c'est une reddition. Mais le bonheur est de courte durée... une ombre plane sur cette rencontre idyllique.</div>`
     },
     { 
-        content: `<div class="img-box"><img src="sorciere.png" onerror="this.parentElement.innerHTML='[IMAGE SORCIERE]'"></div><div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;"><b>DRAME !</b> Elle a utilisé un <b>croissant aux amandes</b> !</div>`
+        content: `<div class="img-box"><img src="sorciere.png" onerror="this.parentElement.innerHTML='[IMAGE SORCIERE]'"></div><div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;"><b>LA TRAHISON VIOLETTE</b><br><br>La Sorcière Violette, ivre de jalousie, lance son sort le plus cruel : <b>L'ALLERGIE MORTELLE</b> !<br><br>Elle fait apparaître un croissant aux amandes enchanté. La Princesse croque... et s'effondre dans un sommeil profond. Tyron doit agir !</div>`
     },
     { 
         id: "battle-dragon",
@@ -117,19 +117,19 @@ const scenes = [
             <div class="battle-ui">
                 <p style="font-size:7px; color:red;">DRAGON DE LA TRISTESSE</p>
                 <div class="hp-bar"><div id="eHP-dragon" class="hp-fill" style="width:100%; background:red;"></div></div>
-                <div style="text-align:center"><img src="dragon.png" class="img-battle-large" onerror="this.parentElement.innerHTML='[IMAGE DRAGON]'"></div>
-                <p style="font-size:7px; text-align:right">TYRON</p>
+                <div style="text-align:center"><img src="dragon.png" class="img-battle-large" onerror="this.parentElement.innerHTML='<div style=font-size:40px>🐲</div>'"></div>
+                <p style="font-size:7px; text-align:right">TYRON (LE SAUVEUR)</p>
                 <div class="hp-bar"><div id="pHP-dragon" class="hp-fill" style="width:100%"></div></div>
-                <div id="battleText-dragon" class="battle-text">Le Dragon barre la route !</div>
+                <div id="battleText-dragon" class="battle-text">Le Dragon pleure des larmes de feu ! Il veut empêcher Tyron d'atteindre sa bien-aimée !</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr;">
-                    <button onclick="fight('kick', 'dragon')">ULTIME KICK</button>
-                    <button onclick="fight('whey', 'dragon')">WHEY (+PV)</button>
+                    <button onclick="fight('kick', 'dragon')">KICK DE LA JUSTICE</button>
+                    <button onclick="fight('whey', 'dragon')">BOIRE LE SHAKER</button>
                 </div>
             </div>`
     },
     { 
         content: `
-            <div class="dialogue">RÉVEILLE-LA ! (Maintiens le bouton, attention au Papa !)</div>
+            <div class="dialogue"><b>LE BAISER DU RÉVEIL</b><br><br>Le Dragon est vaincu, mais la Princesse dort toujours.<br><br>Tyron doit briser le sort avec un baiser sincère... mais attention ! Le Papa de la Princesse surveille les alentours, et il n'est pas prêt à voir son gendre en perruque rose !</div>
             <div id="kiss-zone">
                 <div id="papa" class="papa-icon">👴💤</div>
                 <div style="position:absolute; bottom:10px; width:100%; padding:0 10px;">AMOUR : <div class="hp-bar"><div id="love-fill" class="hp-fill" style="width:0%; background:#ff00ea;"></div></div></div>
@@ -138,7 +138,7 @@ const scenes = [
     },
     { 
         bg: "flowers-bg",
-        content: `<div class="dialogue" style="border:8px double gold;">👑 <b>FÉLICITATIONS TYRON !</b> 👑<br><br>Le Dragon est vaincu et la Princesse réveillée.<br><br>🎁 <b>CADEAU :</b> LA MONTRE DE SPORT MYTHIQUE !<br><br>✨ <b>JOYEUX ANNIVERSAIRE !</b> ✨</div>`
+        content: `<div class="dialogue" style="border:8px double gold;">👑 <b>L'APOTHÉOSE DU CHEVALIER</b> 👑<br><br>Tyron ! Tu as triomphé des préjugés, du sorcier Tanguy, des croissants aux amandes et de la tristesse !<br><br>Ta force et ton style divin ont sauvé la Princesse. Pour te récompenser de tes exploits et de ton futur diplôme à l'ICAM...<br><br>🎁 <b>CADEAU LÉGENDAIRE :</b><br>LA MONTRE DE SPORT CONNECTÉE (Pour tracker tes futurs K.O) !<br><br>✨ <b>JOYEUX ANNIVERSAIRE TYRON !</b> ✨</div>`
     }
 ];
 
@@ -146,14 +146,12 @@ function render() {
     const game = document.getElementById("game");
     let s = scenes[currentScene];
     game.className = s.bg || "";
-    game.innerHTML = `<div class="scene active">${s.content}${shouldShowBtn() ? '<br><button onclick="nextScene()">CONTINUER</button>' : ''}</div>`;
+    game.innerHTML = `<div class="scene active">${s.content}${shouldShowBtn() ? '<br><button onclick="nextScene()">CONTINUER L\\'AVENTURE</button>' : ''}</div>`;
     if(currentScene === 2 || currentScene === 7) { enemyHP = 150; playerHP = 100; isBusy = false; }
     if(currentScene === 8) initKissGame();
 }
 
 function shouldShowBtn() { return ![2, 3, 7, 8].includes(currentScene); }
-
-// Nommé nextScene pour éviter les conflits
 function nextScene() { currentScene++; if(currentScene < scenes.length) render(); }
 
 function fight(move, type) {
@@ -161,17 +159,17 @@ function fight(move, type) {
     const suffix = type === 'dragon' ? '-dragon' : '';
     const txt = document.getElementById("battleText" + suffix);
     
-    if(move === 'kick') { enemyHP -= 50; txt.innerText = "Tyron frappe fort !"; }
-    else if(move === 'regard') { enemyHP -= 60; txt.innerText = "Tyron utilise son charisme !"; }
-    else if(move === 'whey') { playerHP = Math.min(100, playerHP + 50); txt.innerText = "Tyron récupère avec sa WHEY !"; }
-    else if(move === 'fuite') { txt.innerText = "Pas de fuite possible !"; }
+    if(move === 'kick') { enemyHP -= 50; txt.innerText = "Tyron balance un High-Kick magistral !"; }
+    else if(move === 'regard') { enemyHP -= 60; txt.innerText = "Tyron contracte les pecs. L'ennemi est pétrifié !"; }
+    else if(move === 'whey') { playerHP = Math.min(100, playerHP + 50); txt.innerText = "Une gorgée de Whey et Tyron repart de plus belle !"; }
+    else if(move === 'fuite') { txt.innerText = "Fuire ? Avec ces muscles ? Jamais !"; }
     
     updateBars(type);
     
     setTimeout(() => {
-        if(enemyHP <= 0) { txt.innerText = "VICTOIRE !"; setTimeout(nextScene, 1200); }
+        if(enemyHP <= 0) { txt.innerText = "VICTOIRE ÉCRASANTE !"; setTimeout(nextScene, 1200); }
         else {
-            txt.innerText = (type === 'tanguy') ? tanguyLines[Math.floor(Math.random()*tanguyLines.length)] : "Le Dragon crache des flammes !";
+            txt.innerText = (type === 'tanguy') ? tanguyLines[Math.floor(Math.random()*tanguyLines.length)] : "Le Dragon crache des flammes de mélancolie !";
             playerHP -= 15; updateBars(type); isBusy = false;
         }
     }, 1000);
@@ -191,7 +189,7 @@ function initKissGame() {
         if(currentScene !== 8) { clearInterval(gameInt); return; }
         papaLooking = Math.random() > 0.4;
         const p = document.getElementById("papa");
-        if(p) { p.innerText = papaLooking ? "👴💢 !" : "👴💤"; p.style.color = papaLooking ? "red" : "white"; }
+        if(p) { p.innerText = papaLooking ? "👴💢 : JE TE VOIS !" : "👴💤 : *Ronflements*"; p.style.color = papaLooking ? "red" : "white"; }
     }, 1200);
 }
 
@@ -199,7 +197,8 @@ function startKiss() {
     kissInterval = setInterval(() => {
         if(papaLooking) { kissProgress = Math.max(0, kissProgress - 5); document.body.classList.add("warning"); }
         else { kissProgress += 4; document.body.classList.remove("warning"); if(kissProgress >= 100) { clearInterval(kissInterval); nextScene(); } }
-        document.getElementById("love-fill").style.width = kissProgress + "%";
+        const fill = document.getElementById("love-fill");
+        if(fill) fill.style.width = kissProgress + "%";
     }, 80);
 }
 function stopKiss() { clearInterval(kissInterval); document.body.classList.remove("warning"); }

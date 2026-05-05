@@ -1,106 +1,202 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Tyron : La Quête du Chevalier</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    /* DESIGN RETRO - ON GARDE TES COULEURS */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Press Start 2P', cursive; background: #050505; color: white; overflow: hidden; }
-    #game { width: 100vw; height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    
-    .scene { position: absolute; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; animation: fadeIn 0.8s; }
-    .active { display: flex; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyron Saga : Le Chevalier au Cœur de Soie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; image-rendering: pixelated; }
+        body { font-family: 'Press Start 2P', cursive; background: #050505; color: white; overflow: hidden; }
+        #game { width: 100vw; height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        .scene { position: absolute; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; animation: fadeIn 0.5s; }
+        .active { display: flex; }
 
-    /* CADRE PHOTO - SI L'IMAGE MANQUE, CA RESTE JOLI */
-    .img-box {
-        width: 250px; height: 250px;
-        border: 4px solid #fff;
-        box-shadow: 0 0 15px rgba(255, 0, 234, 0.5);
-        margin-bottom: 20px;
-        background: #222; /* Fond gris foncé si image pas là */
-        display: flex; align-items: center; justify-content: center;
-    }
-    .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box {
+            width: 250px; height: 250px;
+            border: 4px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+            background: #222;
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    .dialogue { background: rgba(0,0,0,0.9); border: 4px solid #fff; padding: 15px; max-width: 85%; line-height: 1.6; font-size: 10px; margin-top: 15px; }
-    button { margin: 10px; padding: 10px; font-family: inherit; background: #ffea00; border: 3px solid #000; cursor: pointer; font-size: 8px; }
-    
-    .flowers-bg { background: #601a35; }
-    .crawl-container { width: 80%; height: 60%; perspective: 400px; overflow: hidden; }
-    .crawl-content { position: relative; animation: crawl 25s linear forwards; color: #ffb6c1; line-height: 2.2; font-size: 11px; text-align: center; }
-    
-    @keyframes crawl { 0% { top: 100%; transform: rotateX(20deg); } 100% { top: -200%; transform: rotateX(20deg); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  </style>
+        .dialogue { background: rgba(0,0,0,0.9); border: 4px solid #fff; padding: 15px; max-width: 85%; line-height: 1.6; font-size: 10px; margin-top: 15px; }
+        button { margin: 10px; padding: 12px; font-family: inherit; background: #ffea00; border: 3px solid #000; cursor: pointer; font-size: 8px; }
+        button:hover { background: #fff; }
+
+        /* Style Combat Pokémon */
+        .battle-ui { width: 90%; max-width: 500px; background: #f8f8f8; color: #333; border: 4px solid #555; border-radius: 10px; padding: 15px; text-align: left; }
+        .hp-container { margin-bottom: 10px; }
+        .hp-bar { height: 10px; background: #ccc; border: 2px solid #333; width: 100%; }
+        .hp-fill { height: 100%; background: #4caf50; transition: width 0.5s; }
+        .battle-text { height: 60px; font-size: 8px; color: #000; background: #fff; padding: 10px; border: 2px solid #333; margin-top: 10px; }
+
+        /* Anim Pokémon Sauvage */
+        @keyframes pokeAppear { 
+            0% { transform: scale(0) rotate(0); filter: brightness(0); }
+            50% { transform: scale(1.2) rotate(360deg); filter: brightness(2); }
+            100% { transform: scale(1) rotate(0); filter: brightness(1); }
+        }
+        .wild-appear { animation: pokeAppear 1s ease-out; }
+
+        .flowers-bg { background: #601a35; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 </head>
 <body>
+
 <div id="game"></div>
 
 <script>
 let currentScene = 0;
+let playerHP = 100;
+let tanguyHP = 150;
+let isBusy = false;
+
+// 10 Répliques de Tanguy (Humour amoureux secret)
+const tanguyLines = [
+    "Tanguy admire tes pecs en secret...",
+    "Tanguy : 'Frappe-moi encore Tyron, ta force m'éblouit !'",
+    "Tanguy : 'Est-ce que tu penses à moi pendant tes séances de boxe ?'",
+    "Tanguy rougit en voyant ton jeu de jambes...",
+    "Tanguy : 'Ton armure est si serrée... j'adore !'",
+    "Tanguy : 'Je fais des pompes chaque soir en pensant à toi !'",
+    "Tanguy : 'Tu es plus musclé que tous les autres ingénieurs réunis !'",
+    "Tanguy tente de t'impressionner en bombant le torse !",
+    "Tanguy : 'Et si on partageait un shaker après le combat ?'",
+    "Tanguy : 'Tu me barres l'horizon, et j'aime ça !'"
+];
 
 const scenes = [
-  { // 1. INTRODUCTION
-    content: `
-      <div class="dialogue">
-        Né en Allemagne et élevé à Brive, Tyron porte un héritage puissant.<br><br>
-        Il a des racines philippines par sa mère... on ne s'attardera pas sur elle (elle n'était pas sympa).<br><br>
-        C'est un guerrier Nak Muay au mental d'acier !
-      </div>`
-  },
-  { // 2. TYRON ET SA GUILDE
-    content: `
-      <div class="img-box"><img src="tyron.png" onerror="this.style.display='none'">[IMAGE TYRON]</div>
-      <div class="dialogue">
-        À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
-        Pas encore ingénieur, mais déjà un vrai pilier !
-      </div>`
-  },
-  { // 3. TANGUY LE SORCIER
-    content: `
-      <div class="img-box"><img src="tanguy.png" onerror="this.style.display='none'">[IMAGE TANGUY]</div>
-      <div class="dialogue">
-        À l'ICAM, <b>TANGUY LE SORCIER</b> bloque le passage...<br><br>
-        "Tes épaules barrent l'horizon, Tyron ! C'est criminel d'être aussi imposant. Je vais te combattre !" (En fait, il t'aime bien).
-      </div>`
-  },
-  { // 4. EGLISE (SCENE ROSE)
-    bg: "flowers-bg",
-    content: `
-      <div class="crawl-container">
-        <div class="crawl-content">
-          🌸 LA RENCONTRE DU DESTIN 🌸<br><br>
-          Devant le parvis de l'église, le temps s'arrêta.<br>
-          Tyron vit une Princesse Rousse aux yeux verts.<br>
-          Plus belle qu'un high-kick parfait.<br>
-          Leur regards se croisèrent...
-        </div>
-      </div>`
-  },
-  { // 5. LA SORCIERE VIOLETTE
-    content: `
-      <div class="img-box"><img src="sorciere.png" onerror="this.style.display='none'">[IMAGE SORCIERE]</div>
-      <div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;">
-        <b>DRAME !</b> La Sorcière Violette a frappé !<br><br>
-        Elle a empoisonné la Princesse avec un <b>croissant aux amandes</b> !<br><br>
-        FOUTUES ALLERGIES !
-      </div>`
-  }
+    { // 1. ORIGINES
+        content: `
+            <div class="dialogue">
+                Né en Allemagne et élevé à Brive, Tyron porte un héritage puissant.<br><br>
+                De son père, il tient la rigueur et la précision venue de <b>Chine</b>. 
+                Ses racines <b>Philippines</b> viennent de sa mère... <br><br>
+                (Bon, on ne va pas s'attarder sur elle, elle n'était pas sympa).<br><br>
+                C'est un colosse au mental d'acier !
+            </div>`
+    },
+    { // 2. LA GUILDE
+        content: `
+            <div class="img-box"><img src="tyron.png">[IMAGE TYRON]</div>
+            <div class="dialogue">
+                À Brive avec sa guilde : Jérémy, Louis, Hugo, Gabin, Sacha, Léon et Auguste.<br><br>
+                Pas encore ingénieur, mais déjà un leader naturel !
+            </div>`
+    },
+    { // 3. LE DUEL TANGUY (POKÉMON STYLE)
+        id: "battle",
+        content: `
+            <div class="battle-ui">
+                <div class="hp-container">
+                    <p>SORCIER TANGUY (Niv. 25)</p>
+                    <div class="hp-bar"><div id="eHP" class="hp-fill" style="width:100%"></div></div>
+                </div>
+                <div style="text-align:center"><img src="tanguy.png" style="width:120px;"></div>
+                <div class="hp-container" style="text-align:right">
+                    <p>TYRON LE CHEVALIER (Niv. 25)</p>
+                    <div class="hp-bar"><div id="pHP" class="hp-fill" style="width:100%"></div></div>
+                </div>
+                <div id="battleText" class="battle-text">TANGUY LE SORCIER veut se battre !</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr;">
+                    <button onclick="fight('kick')">KICK BOXE</button>
+                    <button onclick="fight('regard')">REGARD INTENSE</button>
+                    <button onclick="fight('whey')">BOIRE WHEY</button>
+                    <button onclick="fight('fuite')">FUITE</button>
+                </div>
+            </div>`
+    },
+    { // 4. APPARITION PRINCESSE (POKÉMON STYLE)
+        bg: "flowers-bg",
+        content: `
+            <div class="wild-appear">
+                <img src="princesse.png" class="img-box" style="border-radius:50%; border:8px solid gold;">
+            </div>
+            <div class="dialogue" style="background:white; color:black; border-color:black;">
+                <p><b>UN COUP DE FOUDRE SAUVAGE APPARAÎT !</b></p><br>
+                La Princesse aux cheveux roux et yeux verts vous a percuté !<br>
+                L'attaque est super efficace !
+            </div>`
+    },
+    { // 5. RENCONTRE TEXTE
+        bg: "flowers-bg",
+        content: `
+            <div class="dialogue">
+                Devant le parvis de l'église, le temps s'arrête.<br><br>
+                Tyron, le colosse, sent son armure se fendre face à ce regard émeraude.<br><br>
+                Plus belle qu'un high-kick parfait, la princesse vient de capturer son cœur.
+            </div>`
+    },
+    { // 6. LA SORCIERE
+        content: `
+            <div class="img-box"><img src="sorciere.png"></div>
+            <div class="dialogue" style="border-color:#ff00ea; color:#ff00ea;">
+                <b>DRAME !</b> La Sorcière Violette a frappé par jalousie !<br><br>
+                Elle a empoisonné la Princesse avec un <b>croissant aux amandes</b> !<br><br>
+                FOUTUES ALLERGIES !
+            </div>`
+    }
 ];
 
 function render() {
-  const g = document.getElementById("game");
-  let s = scenes[currentScene];
-  g.className = s.bg || "";
-  g.innerHTML = `<div class="scene active">${s.content}<br><button onclick="next()">CONTINUER</button></div>`;
+    const game = document.getElementById("game");
+    let s = scenes[currentScene];
+    game.className = s.bg || "";
+    game.innerHTML = `<div class="scene active">${s.content}${shouldShowBtn() ? '<br><button onclick="next()">CONTINUER</button>' : ''}</div>`;
+}
+
+function shouldShowBtn() {
+    return currentScene !== 2; // Bouton caché pendant le combat
 }
 
 function next() {
-  currentScene++;
-  if(currentScene < scenes.length) render();
-  else alert("FIN DE L'AVENTURE ! JOYEUX ANNIVERSAIRE !");
+    currentScene++;
+    if(currentScene < scenes.length) render();
+    else alert("À SUIVRE... JOYEUX ANNIVERSAIRE TYRON !");
+}
+
+function fight(move) {
+    if(isBusy) return;
+    isBusy = true;
+    const txt = document.getElementById("battleText");
+    
+    if(move === 'kick') {
+        tanguyHP -= 35;
+        txt.innerText = "Tyron lance KICK BOXE ! C'est efficace !";
+    } else if(move === 'regard') {
+        tanguyHP -= 50;
+        txt.innerText = "Tyron utilise REGARD INTENSE ! Tanguy est tout chose...";
+    } else if(move === 'whey') {
+        playerHP = Math.min(100, playerHP + 40);
+        txt.innerText = "Tyron boit sa WHEY ! Il gonfle des pecs !";
+    } else {
+        txt.innerText = "Tyron tente de fuir, mais Tanguy le bloque avec ses abdos !";
+    }
+
+    updateBars();
+
+    setTimeout(() => {
+        if(tanguyHP <= 0) {
+            txt.innerText = "TANGUY est K.O ! 'Je t'aime, euh... je me vengerai !'";
+            setTimeout(next, 2000);
+        } else {
+            // Attaque aléatoire de Tanguy
+            const randomLine = tanguyLines[Math.floor(Math.random() * tanguyLines.length)];
+            txt.innerText = randomLine;
+            playerHP -= 10;
+            updateBars();
+            isBusy = false;
+        }
+    }, 1500);
+}
+
+function updateBars() {
+    document.getElementById("eHP").style.width = (tanguyHP / 150 * 100) + "%";
+    document.getElementById("pHP").style.width = playerHP + "%";
 }
 
 render();

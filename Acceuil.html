@@ -1,1 +1,249 @@
+/* ================================================================
+PNG SPRITE OVERRIDES — TYRON SAGA
+À COLLER APRÈS const C={...}; ET AVANT function px(...)
+================================================================ */
 
+/*
+IMPORTANT :
+GitHub ne lit PAS ton chemin local Windows :
+C:\Users\domit\OneDrive\Documents\GitHub\Tyron-Cadeau
+
+Tu dois utiliser le dossier comme repo GitHub puis push les fichiers.
+Ensuite les images seront accessibles via :
+https://raw.githubusercontent.com/TON-USERNAME/Tyron-Cadeau/main/nomfichier.png
+
+REMPLACE "TON-USERNAME" par ton pseudo GitHub.
+*/
+
+const GITHUB_BASE = "https://raw.githubusercontent.com/TON-USERNAME/Tyron-Cadeau/main/";
+
+const IMG = {
+  tyron: GITHUB_BASE + "tryon.png",
+  princesse: GITHUB_BASE + "princesse.png",
+  sorciere: GITHUB_BASE + "sorciere.png",
+  nouvelleFamille: GITHUB_BASE + "guide_nouvelle_famille.png",
+  icam: GITHUB_BASE + "ICAM.png"
+};
+
+function spriteImg(src, scale=3, cls=''){
+  return `
+    <img 
+      src="${src}" 
+      class="${cls}"
+      alt=""
+      style="
+        image-rendering:pixelated;
+        display:block;
+        width:${scale*64}px;
+        height:auto;
+        filter:drop-shadow(4px 4px 0 #000);
+      "
+    />
+  `;
+}
+
+
+/* ================================================================
+RENDER BATTLE
+Dans function renderBattle(type)
+================================================================ */
+
+/* REMPLACE */
+const pSprite = px(SPR_TYRON_B,2);
+
+/* PAR */
+const pSprite = spriteImg(IMG.tyron,2);
+
+
+
+/* ================================================================
+SCÈNE 0
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,4)}
+/* PAR */
+${spriteImg(IMG.tyron,4)}
+
+
+
+/* ================================================================
+SCÈNE 1
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,3)}
+/* PAR */
+${spriteImg(IMG.tyron,3)}
+
+
+
+/* ================================================================
+SCÈNE 2 — GUILDE DE BRIVE / NOUVELLE FAMILLE
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+  ${px(SPR_TYRON,3)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}
+</div>
+
+/* PAR */
+<div style="display:flex;justify-content:center;margin:8px 0;">
+  ${spriteImg(IMG.nouvelleFamille,5)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 3
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,3)}
+/* PAR */
+${spriteImg(IMG.tyron,3)}
+
+
+
+/* ================================================================
+SCÈNE 4
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,3)}
+/* PAR */
+${spriteImg(IMG.tyron,3)}
+
+
+
+/* ================================================================
+SCÈNE 6
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,4)}
+/* PAR */
+${spriteImg(IMG.tyron,4)}
+
+
+
+/* ================================================================
+SCÈNE 7 — GUILDE ICAM
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+  ${px(SPR_TYRON,3)}${[0,1,2,3,4].map(()=>px(SPR_GUILD,2)).join('')}
+</div>
+
+/* PAR */
+<div style="display:flex;justify-content:center;margin:8px 0;">
+  ${spriteImg(IMG.icam,5)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 8 — RENCONTRE PRINCESSE
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+</div>
+
+/* PAR */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${spriteImg(IMG.tyron,3)}${spriteImg(IMG.princesse,3)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 9
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;align-items:flex-end;gap:50px;margin:8px 0;">
+  ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+</div>
+
+/* PAR */
+<div style="display:flex;align-items:flex-end;gap:50px;margin:8px 0;">
+  ${spriteImg(IMG.tyron,3)}${spriteImg(IMG.princesse,3)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 10
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,3)}
+/* PAR */
+${spriteImg(IMG.tyron,3)}
+
+
+
+/* ================================================================
+SCÈNE 11 — DRESS TO IMPRESS
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,4)}
+/* PAR */
+${spriteImg(IMG.tyron,4)}
+
+
+
+/* ================================================================
+SCÈNE 12 — RETROUVAILLES
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+</div>
+
+/* PAR */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${spriteImg(IMG.tyron,3)}${spriteImg(IMG.princesse,3)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 13 — SORCIÈRE
+================================================================ */
+/* REMPLACE */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${px(SPR_WITCH,3)}${px(SPR_PRINCESS,3)}
+</div>
+
+/* PAR */
+<div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+  ${spriteImg(IMG.sorciere,3)}${spriteImg(IMG.princesse,3)}
+</div>
+
+
+
+/* ================================================================
+SCÈNE 16
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,4)}
+/* PAR */
+${spriteImg(IMG.tyron,4)}
+
+
+
+/* ================================================================
+SCÈNE 17 — BAISER
+================================================================ */
+/* REMPLACE */
+<div>${px(SPR_PRINCESS,3)}</div>
+<div>${px(SPR_TYRON,3)}</div>
+
+/* PAR */
+<div>${spriteImg(IMG.princesse,3)}</div>
+<div>${spriteImg(IMG.tyron,3)}</div>
+
+
+
+/* ================================================================
+SCÈNE 18 — FINAL
+================================================================ */
+/* REMPLACE */
+${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+
+/* PAR */
+${spriteImg(IMG.tyron,3)}${spriteImg(IMG.princesse,3)}

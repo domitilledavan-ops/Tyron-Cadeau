@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TYRON SAGA : LA QUÊTE DU CHEVALIER</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;}
+body{font-family:'Press Start 2P',cursive;background:#050510;color:#f0f0f0;overflow:hidden;width:100vw;height:100vh;}
+#game{width:100vw;height:100vh;position:relative;display:flex;align-items:center;justify-content:center;transition:background 0.5s;}
+
+/* ── BG THEMES ─────────────────────────── */
+#game.bg-space    {background:radial-gradient(ellipse at 50% 110%,#0d1b4b,#050510);}
+#game.bg-forest   {background:linear-gradient(180deg,#071a07 0%,#0e3014 60%,#163a1a 100%);}
+#game.bg-beach    {background:linear-gradient(180deg,#1060c8 0%,#3390e8 40%,#70c8f0 65%,#e8c840 78%,#c8a028 100%);}
+#game.bg-flowers  {background:radial-gradient(ellipse at 50% 60%,#3d0b3d 0%,#1a0520 100%);}
+#game.bg-church   {background:linear-gradient(180deg,#08101e 0%,#101828 50%,#181e30 100%);}
+#game.bg-dark     {background:#030308;}
+#game.bg-battle   {background:linear-gradient(180deg,#7aa8d8 0%,#9abce8 55%,#5a8832 55%,#3a6020 100%);}
+#game.bg-beach2   {background:linear-gradient(180deg,#0870c0 0%,#40a8e0 40%,#80d0f0 65%,#f0d040 80%,#d0a030 100%);}
+#game.bg-wedding  {background:radial-gradient(ellipse at 50% -20%,#2a1248,#0a0614 70%);}
+
+/* ── SCENE SCROLL ───────────────────────── */
+.scene-inner{
+  max-height:100vh;overflow-y:auto;width:100%;max-width:580px;
+  padding:16px 12px 24px;display:flex;flex-direction:column;align-items:center;
+  scrollbar-width:thin;scrollbar-color:#ffd700 #050510;
+  animation:fadeIn .4s ease;
+}
+.scene-inner::-webkit-scrollbar{width:5px;}
+.scene-inner::-webkit-scrollbar-thumb{background:#ffd700;}
+
+/* ── DIALOGUE BOX ───────────────────────── */
+.box{
+  background:#06060f;border:4px solid #ffd700;
+  padding:14px 18px;width:100%;font-size:8.5px;line-height:2;text-align:left;
+  box-shadow:4px 4px 0 #000,0 0 20px rgba(255,215,0,.08);
+  position:relative;
+}
+.box::after{content:'';position:absolute;inset:3px;border:1px solid rgba(255,215,0,.15);pointer-events:none;}
+.box h2{color:#ffd700;font-size:10px;margin-bottom:12px;text-shadow:2px 2px 0 #000;}
+.box h2.center{text-align:center;}
+.box .note{color:#aaa;font-size:7px;font-style:italic;}
+.hl  {color:#ffd700;}
+.hlr {color:#e63946;}
+.hlb {color:#4a9eff;}
+.hlp {color:#ce93d8;}
+.hlg {color:#7cd87c;}
+
+/* ── BUTTONS ────────────────────────────── */
+.btn{
+  font-family:'Press Start 2P',cursive;font-size:8px;padding:10px 14px;margin:5px;
+  background:#1a3ea0;color:#fff;border:none;cursor:pointer;text-transform:uppercase;
+  box-shadow:0 4px 0 #000a3a,4px 4px 0 #000;
+  transition:transform .08s,box-shadow .08s;
+}
+.btn:hover{background:#2a55c8;transform:translate(-1px,-1px);box-shadow:1px 5px 0 #000a3a,5px 5px 0 #000;}
+.btn:active{transform:translate(3px,3px);box-shadow:0 1px 0 #000,1px 1px 0 #000;}
+.btn-gold{background:#a07800;color:#ffe060;box-shadow:0 4px 0 #3a2800,4px 4px 0 #000;}
+.btn-gold:hover{background:#c09000;}
+.btn-red {background:#7a0e16;color:#fff;box-shadow:0 4px 0 #2a0007,4px 4px 0 #000;}
+.btn-red:hover{background:#a01020;}
+.btn-grn {background:#1a5a20;color:#7dff7d;box-shadow:0 4px 0 #072a0a,4px 4px 0 #000;}
+.btn-grn:hover{background:#226630;}
+.btn-pnk {background:#6a0840;color:#ffb3d9;box-shadow:0 4px 0 #280018,4px 4px 0 #000;}
+.btn-pnk:hover{background:#8a1058;}
+.btn-big{font-size:10px;padding:13px 22px;}
+.btn-row{display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+
+/* ── TITLE CARD ─────────────────────────── */
+.tag{
+  font-size:6px;color:#ffd700;padding:4px 10px;
+  background:rgba(0,0,0,.6);border:2px solid #ffd700;
+  margin-bottom:8px;letter-spacing:1px;text-align:center;
+}
+.nameplate{
+  font-size:7px;text-align:center;padding:3px 8px;margin-top:3px;
+  background:#000;border:2px solid #ffd700;color:#ffd700;
+  text-shadow:1px 1px 0 #000;
+}
+
+/* ── BATTLE ─────────────────────────────── */
+.battle-wrap{width:100%;max-width:540px;background:#06060f;border:4px solid #ffd700;box-shadow:4px 4px 0 #000;}
+/* HP row at top (SF2 style) */
+.sf-hprow{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  background:#0a0a20;border-bottom:4px solid #ffd700;padding:8px 10px;gap:8px;
+}
+.sf-hp-block{display:flex;flex-direction:column;}
+.sf-hp-block.right{align-items:flex-end;}
+.sf-name{font-size:6px;color:#ffd700;margin-bottom:3px;}
+.sf-bar{width:100%;height:10px;background:#111;border:2px solid #555;position:relative;}
+.sf-fill{height:100%;background:#4caf50;transition:width .3s;}
+.sf-fill.med{background:#ff9800;}
+.sf-fill.low{background:#e63946;}
+.sf-hp-num{font-size:5px;color:#aaa;margin-top:2px;}
+.sf-vs{font-size:10px;color:#ffd700;text-align:center;text-shadow:0 0 10px #ffd700;}
+
+/* Stage */
+.sf-stage{
+  height:190px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#7aa8d8 0%,#9abce8 54%,#5a8832 54%,#3a6020 100%);
+  border-bottom:4px solid #000;
+}
+.sf-stage-floor{position:absolute;bottom:0;left:0;right:0;height:46%;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 40px,transparent 40px,transparent 80px);}
+.sf-p1{position:absolute;left:16px;bottom:0;}
+.sf-p2{position:absolute;right:16px;bottom:0;}
+.sf-clouds{position:absolute;top:8px;left:0;right:0;height:30px;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 30'><ellipse cx='30' cy='20' rx='20' ry='10' fill='white' opacity='.4'/><ellipse cx='120' cy='22' rx='15' ry='8' fill='white' opacity='.3'/></svg>") repeat-x;
+  background-size:200px 30px;}
+
+.battle-log{
+  font-size:8px;padding:10px 12px;min-height:58px;line-height:1.8;
+  background:#04040e;border-bottom:4px solid #ffd700;
+}
+.battle-acts{
+  display:grid;grid-template-columns:1fr 1fr;
+  background:#08081a;
+}
+.battle-acts .btn{font-size:7px;padding:9px 6px;margin:0;border-radius:0;
+  outline:1px solid rgba(255,215,0,.3);box-shadow:none;}
+.battle-acts .btn:hover{transform:none;}
+
+/* ── OUTFIT PICKER ──────────────────────── */
+.outfit-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:8px 0;}
+.outfit-opt{
+  background:#0a0a24;border:3px solid #1a3ea0;padding:10px 8px;
+  cursor:pointer;text-align:center;font-size:6.5px;width:110px;line-height:1.8;
+  transition:border-color .15s;
+}
+.outfit-opt:hover{border-color:#ffd700;}
+.outfit-opt.sel{border-color:#4caf50;background:#061a09;}
+.outfit-opt .outfit-char{display:flex;justify-content:center;margin-bottom:6px;}
+
+/* ── KISS GAME ──────────────────────────── */
+.kiss-field{
+  width:300px;height:180px;background:#10011a;
+  border:4px solid #ff69b4;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:space-around;
+  padding:10px;
+}
+.love-bar-outer{width:100%;height:10px;background:#1a001a;border:2px solid #ff69b4;}
+.love-bar-fill{height:100%;background:linear-gradient(90deg,#ff69b4,#ff1493);transition:width .08s;}
+
+/* ── STARS FINALE ───────────────────────── */
+@keyframes star-fall{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(105vh) rotate(720deg) scale(.5);opacity:0;}}
+.star-p{position:fixed;pointer-events:none;z-index:9999;animation:star-fall linear forwards;font-size:14px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes glow2{0%,100%{text-shadow:0 0 6px #ffd700,0 0 12px #ffd700;}50%{text-shadow:0 0 20px #ffd700,0 0 40px #ff9800,0 0 60px #ff4500;}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-3px);}40%,80%{transform:translateX(3px);}}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+.glow{animation:glow2 2s infinite;}
+.blink{animation:blink 1s infinite;}
+.shake{animation:shake .3s;}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<script>
+/* ================================================================
+   PIXEL ART ENGINE — Street Fighter II style sprites
+   Each sprite is a grid of single chars mapped to hex colors
+================================================================ */
+const C={
+  '.':null,
+  'A':'#f0c080', // skin light (Tyron)
+  'a':'#d09050', // skin shadow
+  'B':'#2050d0', // armor blue
+  'b':'#102898', // armor dark blue
+  'G':'#f8c800', // gold
+  'g':'#b88800', // dark gold
+  'R':'#e03030', // red (cape/detail)
+  'r':'#901818', // dark red
+  'V':'#d0d0d0', // silver
+  'v':'#909090', // dark silver
+  'N':'#8B4513', // brown
+  'n':'#5C2810', // dark brown
+  'W':'#f8f8f8', // white
+  'w':'#c0c0c0', // light grey
+  'k':'#0a0a0a', // black outline
+  'O':'#ff7000', // orange (Tanguy skin)
+  'o':'#c04800', // Tanguy dark skin
+  'P':'#d060e0', // purple (witch)
+  'p':'#801898', // dark purple
+  'Q':'#c01818', // dragon red
+  'q':'#780808', // dragon dark red
+  'Y':'#f0b000', // dragon gold belly
+  'y':'#a07000', // dark gold
+  'X':'#e86020', // dragon orange
+  'H':'#701010', // princess hair red
+  'h':'#420808', // princess hair dark
+  'I':'#f878a8', // princess dress pink
+  'i':'#b84870', // dress dark pink
+  'E':'#30c040', // princess eyes green
+  'e':'#008820', // dark green
+  'L':'#a08060', // papa grey-brown
+  'l':'#705040', // papa dark
+  'S':'#606060', // papa grey
+  's':'#404040', // dark grey
+  'M':'#e8e8e8', // papa white hair
+  'm':'#b0b0b0', // shadow white
+  'T':'#20a0d0', // teal
+  't':'#006080', // dark teal
+  'F':'#f84000', // fire orange-red
+  'f':'#c02000', // fire dark
+  'Z':'#ffff40', // fire yellow
+  'z':'#c8a800', // fire dark yellow
+};
+
+function px(rows,sc){
+  if(!rows||!rows.length)return'';
+  const h=rows.length,w=rows[0].length;
+  let r='';
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const c=C[rows[y][x]];if(c)r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`;}
+  return`<svg viewBox="0 0 ${w} ${h}" width="${w*sc}" height="${h*sc}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;">${r}</svg>`;
+}
+
+/* ================================================================
+   SPRITES  (16 or 18 px wide, 24-28 px tall — SF2 proportions)
+================================================================ */
+
+/* TYRON — Blue knight, fighting stance */
+const SPR_TYRON=[
+  '......kkkkkkkk......',
+  '.....kBBBBBBBBk.....',
+  '.....kBGGGGGGBk.....',
+  '.....kBGGGGGGBk.....',
+  '......kBBBBBBk......',
+  '......kAAAAAk.......',
+  '......kAAaAAk.......',
+  '......kAAAAAk.......',
+  '.....kGGGGGGGGk.....',
+  '....kVkBBBBBBkVk....',
+  '....kVkBBRBBBkVk....',
+  '....kVkBBBBBBkVk....',
+  '....kVkBBRRBBkVk....',
+  '.....kGGGGGGGGk.....',
+  '....kNNNkkkNNNk.....',
+  '....kNNNk.kNNNk.....',
+  '....kNNNk.kNNNk.....',
+  '...kNNNNk.kNNNNk....',
+  '...kBBBNk.kNBBBk....',
+  '...kBBBBk.kBBBBk....',
+  '...kBBBk...kBBBk....',
+];
+
+/* TYRON BATTLE — slight attack lean */
+const SPR_TYRON_B=[
+  '.....kkkkkkkk.......',
+  '....kBBBBBBBBk......',
+  '....kBGGGGGGBk......',
+  '....kBGGGGGGBk......',
+  '.....kBBBBBBk.......',
+  '.....kAAAAAAAAk.....',
+  '.....kAAaAAAAk......',
+  '.....kAAAAAAAAk.....',
+  '....kGGGGGGGGGk.....',
+  '...kVkBBBBBBBkVk....',
+  '...kVkBBBRBBBkVk....',
+  '...kVkBBBBBBBkVk....',
+  '..kVVkBBRRBBBkVVk...',
+  '...kGGGGGGGGGGk.....',
+  '..kVVVkNNkNNkVVVk...',  // sword arm extended
+  '..kVVk.kNkNk.kVVk..',
+  '...kNNk.kNkNk.kk...',
+  '...kNNNk.kNNNk......',
+  '...kBBNk.kNBBk......',
+  '...kBBBk.kBBBk......',
+  '...kBBk...kBBk......',
+];
+
+/* TANGUY — Hulking bodybuilder, JoJo stance */
+const SPR_TANGUY=[
+  '....kkkOOOOOOkkk....',
+  '...kOOOOOOOOOOOk....',
+  '...kOOoOOOOOoOOk....',
+  '...kOOOOOOOOOOOk....',
+  '...kOOOooooOOOOk....',
+  '....kkkOOOOOkk......',
+  '..kOOOOOOOOOOOOOk..',
+  '.kOOOOOOOOOOOOOOOk.',
+  '.kOOoOOOOOOOOoOOOk.',
+  '.kOOOOOOOOOOOOOOOk.',
+  'kOOOOOOOOOOOOOOOOOk',
+  'kOOoooooooooooooOOk',  // abs
+  'kOOoooooooooooooOOk',
+  '.kOOOOOOOOOOOOOOk..',
+  '..kkkNNNNNNNNkkk....',
+  '....kNNNNNNNNk......',
+  '....kNNkkkkNNk......',
+  '....kNNk..kNNk......',
+  '....kNNk..kNNk......',
+  '...kOOOk..kOOOk.....',
+];
+
+/* TANGUY BATTLE — arms raised, JoJo pose */
+const SPR_TANGUY_B=[
+  'kOk..kkkOOkkk..kOk..',   // raised fists
+  'kOOk.kOOOOOOk.kOOk.',
+  '.kOOkkOOOOOOkkOOk..',
+  '..kOOOOOOOOOOOOk...',
+  '..kOOOoOOOOoOOOk...',
+  '..kOOOOOOOOOOOOk...',
+  '..kOOOoooooOOOOk...',
+  '..kOOOOOOOOOOOOk...',
+  '.kOOOOOOOOOOOOOOk..',
+  'kOOOOOOOOOOOOOOOOk.',
+  'kOOoooooooooooooOOk',
+  'kOOoooooooooooooOOk',
+  '.kOOOOOOOOOOOOOOk..',
+  '..kkkNNNNNNNkk......',
+  '....kNNNNNNNk.......',
+  '....kNkkkkkNk.......',
+  '....kNk...kNk.......',
+  '....kNk...kNk.......',
+  '...kOOk...kOOk......',
+];
+
+/* PRINCESS — Red hair, green eyes, pink dress */
+const SPR_PRINCESS=[
+  '....kHHHHHHk........',
+  '...kHHHHHHHHk.......',
+  '...kHAAAAAHHk.......',
+  '...kHAEaAEAHk.......',   // green eyes
+  '...kHAAAAAaHk.......',
+  '....kHAAAAHk........',
+  '....kHHHHHHk........',
+  '...kIIIIIIIIIk......',
+  '..kIIIIIIIIIIIk.....',
+  '..kIIIIIiIIIIIk.....',
+  '..kIIIIIIIIIIIk.....',
+  '.kIIIIIIiIIIIIIk....',
+  '.kIIIiIIIIIiIIIk....',
+  '.kIIIIIIIIIIIIIk....',
+  '..kIIIIIIIIIIIk.....',
+  '..kIIIIIiIIIIIk.....',
+  '..kAAkkkkkkAAk......',
+  '..kAAk....kAAk......',
+  '..kAAk....kAAk......',
+  '..kwwk....kwwk......',
+];
+
+/* WITCH — Purple hat, robes, menacing */
+const SPR_WITCH=[
+  '.....kPPPPPPPk......',
+  '....kPPPPPPPPPk.....',
+  '....kPPPPPPPPPk.....',
+  'kkkkkkkkkkkkkkkkkkk.',   // hat brim
+  '....kpApAAAApk......',   // face with hat shadow
+  '....kpAaAaAAk.......',
+  '....kpAAAApAAk......',
+  '....kpApApAAk.......',
+  '.....kpppppk........',
+  '....kPPPPPPPPk......',
+  '...kPPPPPPPPPPk.....',
+  '..kPPPPpPpPPPPPk....',
+  '..kPPPPPPPPPPPPk....',
+  '.kPPPPPPPPPPPPPPk...',
+  '.kPPPpPPPPPpPPPPk...',
+  '.kPPPPPPPPPPPPPPk...',
+  '..kPPPPPPPPPPPPk....',
+  '..kPPPk....kPPPk....',
+  '..kpppk....kpppk....',
+];
+
+/* DRAGON — Huge, red, fire breath */
+const SPR_DRAGON=[
+  '....kQQQQQQQQQQQk...',
+  '...kQQQQQQQQQQQQQk..',
+  '..kQQQXXXXXXXXQQQk..',
+  '..kQQXXYYYYYYXXQQk..',
+  '..kQQXYYkYkYYXXQQk..',   // eyes
+  '..kQQXXYYYYYYXXQk...',
+  '..kQQQXXXXXXXXQQk...',
+  '.kQQQQXYYYYYXQQQQk..',   // belly
+  '.kQQQQXYYYYYXQQQQk..',
+  'kQQQQQXQQQQQXQQQQQk.',
+  'kQQQQQQQQQQQQQQQQQk.',
+  'kQQQQQQQQQQQQQQQQQk.',
+  '.kQQQQQQQQQQQQQQQk..',
+  '.kQQqQQQQQQQQqQQQk..',
+  '..kQQQQQQQQQQQQQk...',
+  '..kqQk.......kQqk...',
+  '...kFFFk..kFFFk.....',   // fire feet
+  '...kZZFk..kFZZk.....',
+  '....kZk....kZk......',
+];
+
+/* PAPA — Stern old man */
+const SPR_PAPA=[
+  '....kMMMMMMk........',
+  '...kMMAMMAMMk.......',
+  '...kMMAMMAMMk.......',
+  '...kMMAAAAAMk.......',
+  '...kMAAAAAMMk.......',
+  '....kMAAAAMk........',
+  '....kSSSSSk.........',
+  '...kLLLLLLLk........',
+  '...kLLkkLLkLk.......',   // jacket
+  '...kLLkkLLkLk.......',
+  '...kLLLLLLLLk.......',
+  '..kLLLLLLLLLLk......',
+  '..kLlLLLLLLlLk......',
+  '...ksssssssssk......',
+  '...kssskkksssk......',
+  '...ksssk.kssk.......',
+  '...kSSk..kSSk.......',
+  '..kwwwk..kwwwk......',
+  '..kwwwk..kwwwk......',
+];
+
+/* GUILD MEMBER — Generic companion */
+const SPR_GUILD=[
+  '...kkkkkk...',
+  '..kAAAAAAAAk',
+  '..kAAAAAAAAk',
+  '..kAaAAAaAk.',
+  '..kAAAAAAAAk',
+  '...kAAAAkk..',
+  '..kBBBBBBk..',
+  '..kBkBBkBk..',
+  '..kBBBBBBk..',
+  '..kNNNNNNk..',
+  '..kNNkkkNk..',
+  '..kNNk.kNk..',
+  '..kwwk.kwwk.',
+];
+
+/* ================================================================
+   GAME STATE
+================================================================ */
+let sc=0, playerHP=100, enemyHP=100, isBusy=false;
+let kissCount=0, kissProgress=0, papaLooking=false;
+let kissIntervalId=null, papaIntervalId=null;
+let battleType=null, dressTop=null, dressBtm=null;
+
+/* ================================================================
+   BATTLE SYSTEM
+================================================================ */
+const TANGUY_TAUNTS=[
+  "Tanguy : <i>\"Tes tractions m'empêchent de dormir...\"</i>",
+  "Tanguy rougit violemment.",
+  "Tanguy : <i>\"Ces dorsaux sont illégaux...\"</i>",
+  "Tanguy frappe mais pense à autre chose.",
+  "Tanguy : <i>\"On partage un shaker après ?\"</i>",
+  "Tanguy : <i>\"Ces abdos sont en chocolat ? Car j'ai envie de croquer dans cette tablette.\"</i>",
+  "Tanguy prend une pose JoJo puis attaque.",
+];
+const DRAGON_ATK=[
+  "Le Dragon crache des flammes !",
+  "Coup de queue titanesque !",
+  "Rugissement de pure tristesse !",
+  "Souffle glacial maléfique !",
+];
+
+function renderBattle(type){
+  const isT=(type==='tanguy');
+  const maxE=isT?100:120;
+  const eName=isT?'SORCIER TANGUY':'DRAGON TRISTESSE';
+  const eSprite=isT?px(SPR_TANGUY_B,2):px(SPR_DRAGON,2);
+  const pSprite=px(SPR_TYRON_B,2);
+  return`<div class="battle-wrap">
+    <div class="sf-hprow">
+      <div class="sf-hp-block">
+        <div class="sf-name">${eName}</div>
+        <div class="sf-bar" style="width:140px"><div id="eHP" class="sf-fill" style="width:${enemyHP/maxE*100}%"></div></div>
+        <div id="eHPn" class="sf-hp-num">${enemyHP}/${maxE}</div>
+      </div>
+      <div class="sf-vs">VS</div>
+      <div class="sf-hp-block right">
+        <div class="sf-name">TYRON</div>
+        <div class="sf-bar" style="width:140px"><div id="pHP" class="sf-fill" style="width:${playerHP}%"></div></div>
+        <div id="pHPn" class="sf-hp-num right">${playerHP}/100</div>
+      </div>
+    </div>
+    <div class="sf-stage">
+      <div class="sf-clouds"></div>
+      <div class="sf-stage-floor"></div>
+      <div class="sf-p1">${eSprite}</div>
+      <div class="sf-p2">${pSprite}</div>
+    </div>
+    <div id="bLog" class="battle-log">${isT?'Tanguy bloque le passage et fait une pose JoJo !':'Le Dragon de la Tristesse rugit de douleur !'}</div>
+    <div class="battle-acts">
+      <button class="btn btn-red" onclick="atk('kick')">⚔ KICK BOXE</button>
+      <button class="btn btn-gold" onclick="atk('charisme')">✨ CHARISME</button>
+      <button class="btn btn-grn" onclick="atk('whey')">💪 WHEY +HP</button>
+      <button class="btn" onclick="atk('combo')">★ COMBO</button>
+    </div>
+  </div>`;
+}
+
+function atk(move){
+  if(isBusy)return; isBusy=true;
+  const isT=(battleType==='tanguy'),maxE=isT?100:120;
+  const log=document.getElementById('bLog');
+  let dmg=0,heal=0,msg='';
+  if(move==='kick'){dmg=30+~~(Math.random()*20);msg=`Tyron balance un High-Kick ! ${dmg} dégâts !`;}
+  else if(move==='charisme'){dmg=38+~~(Math.random()*25);msg=`Tyron contracte les pecs au maximum ! ${dmg} dégâts !`;}
+  else if(move==='whey'){heal=30+~~(Math.random()*20);playerHP=Math.min(100,playerHP+heal);msg=`Tyron boit sa Whey protéinée ! +${heal} HP !`;}
+  else{dmg=48+~~(Math.random()*28);msg=`COMBO LÉGENDAIRE DE CHEVALIER ! ${dmg} dégâts !`;}
+  enemyHP=Math.max(0,enemyHP-dmg);
+  updateBars(maxE); if(log)log.innerHTML=msg;
+  setTimeout(()=>{
+    if(enemyHP<=0){
+      if(log)log.innerHTML=`<span style="color:#ffd700">★ VICTOIRE ! ${isT?"Tanguy s'effondre dans une dernière pose...":"Le Dragon rugit une ultime fois !"}</span>`;
+      setTimeout(nextSc,1600);return;
+    }
+    let ed=10+~~(Math.random()*15); playerHP=Math.max(0,playerHP-ed);
+    const eMsg=isT?TANGUY_TAUNTS[~~(Math.random()*TANGUY_TAUNTS.length)]+` (-${ed} HP)`:DRAGON_ATK[~~(Math.random()*DRAGON_ATK.length)]+` (-${ed} HP)`;
+    if(log)log.innerHTML=eMsg; updateBars(maxE);
+    if(playerHP<=0){
+      if(log)log.innerHTML=`<span style="color:#e63946">K.O. ! Mais un chevalier se relève !</span>`;
+      playerHP=50; setTimeout(()=>{updateBars(maxE);isBusy=false;},1200);return;
+    }
+    isBusy=false;
+  },950);
+}
+
+function updateBars(maxE){
+  const eB=document.getElementById('eHP'),pB=document.getElementById('pHP');
+  const eN=document.getElementById('eHPn'),pN=document.getElementById('pHPn');
+  if(eB){eB.style.width=(enemyHP/maxE*100)+'%';eB.className='sf-fill'+(enemyHP/maxE<.2?' low':enemyHP/maxE<.5?' med':'');}
+  if(pB){pB.style.width=playerHP+'%';pB.className='sf-fill'+(playerHP<20?' low':playerHP<50?' med':'');}
+  if(eN)eN.textContent=`${enemyHP}/${maxE}`;
+  if(pN)pN.textContent=`${playerHP}/100`;
+}
+
+/* ================================================================
+   KISS GAME
+================================================================ */
+function initKiss(){
+  if(papaIntervalId)clearInterval(papaIntervalId);
+  papaIntervalId=setInterval(()=>{
+    if(sc!==17){clearInterval(papaIntervalId);return;}
+    papaLooking=Math.random()>.45;
+    const st=document.getElementById('papaSt');
+    if(st)st.innerHTML=papaLooking
+      ?`<div style="color:#e63946;font-size:9px;text-align:center;">${px(SPR_PAPA,2)}<br>PAPA REGARDE !</div>`
+      :`<div style="color:#4caf50;font-size:9px;text-align:center;">${px(SPR_PAPA,2)}<br>Zzz... dort</div>`;
+  },1300);
+}
+function startKiss(){
+  stopKiss();
+  kissIntervalId=setInterval(()=>{
+    if(sc!==17){stopKiss();return;}
+    const lf=document.getElementById('lFill'),msg=document.getElementById('kMsg');
+    if(papaLooking){
+      kissProgress=Math.max(0,kissProgress-10);
+      if(msg)msg.innerHTML='<span style="color:#e63946">Il vous voit ! Reculez !</span>';
+    }else{
+      kissProgress+=3.5;
+      if(msg)msg.innerHTML='<span style="color:#ff69b4">... doux ...</span>';
+      if(kissProgress>=100){
+        kissProgress=0; kissCount++;
+        const kc=document.getElementById('kCount'); if(kc)kc.textContent=kissCount;
+        if(msg)msg.innerHTML=`<span style="color:#ffd700">Bisou ${kissCount}/4 !</span>`;
+        if(kissCount>=4){clearInterval(kissIntervalId);clearInterval(papaIntervalId);
+          if(msg)msg.innerHTML='<span style="color:#ffd700">✨ Le sort est brisé !!!</span>';
+          setTimeout(nextSc,1500);return;}
+      }
+    }
+    if(lf)lf.style.width=kissProgress+'%';
+  },80);
+}
+function stopKiss(){if(kissIntervalId){clearInterval(kissIntervalId);kissIntervalId=null;}}
+
+/* ================================================================
+   DRESS GAME
+================================================================ */
+function selDress(which,val){
+  if(which==='top')dressTop=val; else dressBtm=val;
+  document.querySelectorAll('.outfit-opt').forEach(el=>{
+    if(el.dataset.which===which)el.classList.remove('sel');
+  });
+  const el=document.querySelector(`[data-which="${which}"][data-val="${val}"]`);
+  if(el)el.classList.add('sel');
+  checkDress();
+}
+function checkDress(){
+  if(!dressTop||!dressBtm)return;
+  const res=document.getElementById('dRes'),btn=document.getElementById('dBtn');
+  const win=(dressTop==='robe'&&dressBtm==='perruque');
+  const ok=(dressTop==='nu'&&dressBtm==='short')||(dressTop==='robe'&&dressBtm==='short');
+  if(win){
+    if(res)res.innerHTML='<span style="color:#4caf50">COMBO LÉGENDAIRE !<br>La sécurité t\'applaudit !<br>PA pleure de fierté !</span>';
+    if(btn)btn.style.display='inline-block';
+  }else if(ok){
+    if(res)res.innerHTML='<span style="color:#ff9800">Combinaison... audacieuse.<br>Le videur laisse passer par curiosité.</span>';
+    if(btn)btn.style.display='inline-block';
+  }else{
+    if(res)res.innerHTML='<span style="color:#e63946">REFUSÉ ! Trop banal.<br>Essaie encore !</span>';
+    if(btn)btn.style.display='none';
+  }
+}
+
+/* ================================================================
+   SCENES ARRAY
+================================================================ */
+const SCENES=[
+
+/* 0 — TITLE */
+{bg:'bg-space',render(){return`
+  <div class="tag">UNE AVENTURE ÉPIQUE — 6 MAI 2003 → 6 MAI 2026</div>
+  ${px(SPR_TYRON,4)}
+  <div class="nameplate">TYRON — LE CHEVALIER</div>
+  <div class="box" style="text-align:center;margin-top:14px;">
+    <div style="font-size:16px;letter-spacing:3px;color:#ffd700;text-shadow:0 0 10px #ffd700,3px 3px 0 #000;margin-bottom:8px;" class="glow">TYRON SAGA</div>
+    <div style="font-size:7px;color:#aaa;margin-bottom:14px;">LA QUÊTE DU CHEVALIER</div>
+    <div style="font-size:8px;color:#ce93d8;">Joyeux 23ème Anniversaire !</div>
+  </div>
+  <div class="btn-row"><button class="btn btn-gold btn-big" onclick="nextSc()">▶ JOUER</button></div>`}},
+
+/* 1 — PROLOGUE */
+{bg:'bg-space',render(){return`
+  <div class="tag">PROLOGUE : IL Y A TRÈS LONGTEMPS...</div>
+  ${px(SPR_TYRON,3)}
+  <div class="box"><h2>LA NAISSANCE DU CHEVALIER</h2>
+    <p>Le <span class="hl">6 mai 2003</span>, dans une ville d'Allemagne qui ne se doutait de rien, une étoile filante traverse le ciel...</p><br>
+    <p>D'un côté : un père porteur de la légendaire <span class="hl">Rigueur Chinoise™</span>, qui avait jadis bravé un régime totalitaire et toutes ses paperasses administratives pour s'installer en Allemagne. Un homme qui prouve que la détermination peut traverser n'importe quel mur.</p><br>
+    <p>De l'autre : une mère venue des Philippines. On ne s'étendra pas trop sur ce chapitre, car <span class="hlr">certaines pages méritent d'être tournées rapidement</span>. Ce qu'on retient, c'est que Tyron en a tiré une force mentale d'acier et une capacité légendaire à regarder vers l'avant. Aptitude rare et précieuse.</p><br>
+    <p>De cette union naît donc <span class="hl">TYRON</span> — un bébé chevalier déjà équipé de dorsaux précoces et d'un regard qui destine aux grandes choses.</p><br>
+    <p class="note">Brive-la-Gaillarde n'était pas prête. Franchement, personne ne l'était.</p>
+  </div>
+  <div class="btn-row"><button class="btn" onclick="nextSc()">SUITE ▶</button></div>`}},
+
+/* 2 — GUILDE BRIVE */
+{bg:'bg-forest',render(){return`
+  <div class="tag">CHAPITRE I — LA GUILDE DE BRIVE</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}
+  </div>
+  <div class="box"><h2>LA NOUVELLE FAMILLE</h2>
+    <p>Avant de conquérir le monde de l'ingénierie, Tyron règne sur sa guilde briviste. Entre deux séances de skate et une surconsommation anormale de soirée, il forge les liens qui dureront toute une vie.</p><br>
+    <p><span class="hl">Jérémy</span> — le frère de coeur, toujours là pour toi, surtout si il y a une baston !<br>
+    <span class="hl">Louis</span> — une vie beaucoup trop aléatoire, comment on peut avoir d'anecdocte aussi folle ?? <br>
+    <span class="hl">Hugo</span> — l'archer des réseaux sociaux, précis et discret<br>
+    <span class="hl">Gabin</span> — le barde charismatique, il chante faux mais avec conviction<br>
+    <span class="hl">Sacha</span> — le beau gosse, mais il est en école de commerce ...<br>
+    <span class="hl">Léon</span> — le sportif, qui s'est une peu laissé aller...<br>
+    <span class="hl">Auguste</span> — le gendre idéal, mais il a épuisé trop de PDV dans les soirées, éspèront qu'il en reste suffisamment pour finir médecine</p><br>
+    <p class="note">Mais un destin d'ingénieur attendait. L'ICAM appelait...</p>
+  </div>
+  <div class="btn-row"><button class="btn" onclick="nextSc()">PARTIR À L'AVENTURE ▶</button></div>`}},
+
+/* 3 — ICAM ARRIVÉE */
+{bg:'bg-church',render(){return`
+  <div class="tag">CHAPITRE II — L'ACADÉMIE DES INGÉNIEURS</div>
+  ${px(SPR_TYRON,3)}
+  <div class="box"><h2>L'ICAM — FORTERESSE DU SAVOIR</h2>
+    <p>Après les au revoirs brivistes (poignées de mains viriles, quelques larmes discrètes, son skate dans la valise), Tyron part rejoindre l'<span class="hl">ICAM</span>, l'Académie Légendaire où les futurs maîtres du calcul différentiel et de la mécanique des fluides se forgent.</p><br>
+    <p>Le chevalier est prêt. Skate ✓, un peu de beuh ✓, motivation minimale ✓.</p><br>
+    <p>Sauf qu'à peine les grandes portes franchies, une aura étrange enveloppe notre héros. Un épais <span class="hlr">brouillard mental</span> l'envahit — il ne sait plus si la dérivée de sin(x) vaut cos(x) ou une valeur inventée.</p><br>
+    <p>Quelqu'un a lancé un sort. Et ce quelqu'un sent la sueur de salle de sport et porte un t-shirt cinq tailles trop petit pour ses propres biceps...</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-red" onclick="nextSc()">QUI EST LÀ ? ▶</button></div>`}},
+
+/* 4 — TANGUY RÉVÉLATION */
+{bg:'bg-dark',render(){return`
+  <div class="tag">ENNEMI DÉTECTÉ</div>
+  <div style="display:flex;align-items:flex-end;justify-content:center;gap:30px;margin:8px 0;">
+    ${px(SPR_TYRON,3)}<div style="font-size:14px;color:#ffd700;align-self:center;text-shadow:0 0 12px #ffd700">VS</div>${px(SPR_TANGUY,3)}
+  </div>
+  <div class="box" style="border-color:#e63946;"><h2 style="color:#e63946;">LE SORCIER TANGUY</h2>
+    <p>Surgissant des vestiaires de l'ICAM, les biceps luisant sous des néons palpitants, <span class="hlr">TANGUY</span> s'encadre dans la porte. Ses pectoraux arrivent deux secondes avant lui.</p><br>
+    <p>Tanguy est ce qu'on appelle poliment un <span class="hl">culturiste sorcier</span>. En public : poses épiques à la <em>JoJo's Bizarre Adventure</em>™, beaucoup trop homophobe pour être hétéro, blague de mauvais goût. En privé... ses journaux intimes racontaient une tout autre histoire.</p><br>
+    <p>Il a jeté le <span class="hlr">Sort du Brouillard Mental</span> sur Tyron pour une raison transparente : <em>"Si tu ne comprends pas les maths, tu viendras me voir pour l'aide aux devoirs... et peut-être un shaker en tête-à-tête."</em></p><br>
+    <p class="note">Tyron saisit son épée en pixel. C'est l'heure du combat.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-red btn-big" onclick="nextSc()">⚔ COMBATTRE !</button></div>`}},
+
+/* 5 — BATTLE TANGUY */
+{bg:'bg-battle',isBattle:true,bKey:'tanguy',
+  onEnter(){battleType='tanguy';playerHP=100;enemyHP=100;isBusy=false;},
+  render(){return renderBattle('tanguy');}},
+
+/* 6 — VICTOIRE TANGUY */
+{bg:'bg-space',render(){return`
+  <div class="tag">VICTOIRE !</div>
+  ${px(SPR_TYRON,4)}
+  <div class="box"><h2>LIBÉRÉ DU BROUILLARD !</h2>
+    <p>Tanguy gît au sol du gymnase, tentant encore une dernière pose malgré la défaite totale. Dans son souffle final il murmure quelque chose à propos de <em>"d'abdos d'exception"</em>.</p><br>
+    <p>Le brouillard mental se dissipe instantanément. La dérivée de sin(x) est cos(x), les intégrales retrouvent leur sens, et les équations différentielles redeviennent lisibles.</p><br>
+    <p>Soudain lucide et plein d'une énergie nouvelle, Tyron réalise que l'ICAM regorge de gens fascinants qui n'essaient pas (ouvertement) de lui lancer des sorts...</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-gold" onclick="nextSc()">EXPLORER L'ICAM ▶</button></div>`}},
+
+/* 7 — GUILDE ICAM */
+{bg:'bg-forest',render(){return`
+  <div class="tag">CHAPITRE III — LA GUILDE ICAM</div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${[0,1,2,3,4].map(()=>px(SPR_GUILD,2)).join('')}
+  </div>
+  <div class="box"><h2>LES NOUVEAUX COMPAGNONS</h2>
+    <p>Le brouillard levé, Tyron peut enfin voir ses camarades de l'ICAM dans toute leur splendeur :</p><br>
+    <p><span class="hl">Louise</span> — la guerrière des causes justes, à l'humour... elle essaye quoi.<br>
+    <span class="hl">Martin</span> — le chevalier qui adore l'académie et ne veux pas la quitter, une vraie légende <br>
+    <span class="hl">PA</span> — l'archer dont le nez arrive avant lui, compliqué pour les attaques surprises...<br>
+    <span class="hl">Mathias</span> — le healer du groupe, toujours un mot sympas<br>
+    <span class="hl">Charly</span> — le chimiste, il lance de scaré bombe, personne ne connaît le secret de leurs composition <br>
+    <span class="hl">Micah</span> — le chevalier chill, son attaque ? Parole sporifique <br>
+    <span class="hl">Pilou</span> — le druide des potions qui détruisent, imbatable au cul sec<br>
+    <span class="hl">Titouan</span> — le barde, toujours à chanter à la gloire de sa dulcinée<br>
+    <span class="hl">Quentin</span> — le mage des breuvages, il fait disparître les pintes comme personne </p><br>
+    <p class="note">Une seconde famille. Mais quelque chose d'autre appelait Tyron — son âme avait besoin de recentrement...</p>
+  </div>
+  <div class="btn-row"><button class="btn" onclick="nextSc()">SUITE ▶</button></div>`}},
+
+/* 8 — MESSE / COUP DE FOUDRE */
+{bg:'bg-church',render(){return`
+  <div class="tag">CHAPITRE IV — LE PARVIS DE L'ÉGLISE</div>
+  <div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+  </div>
+  <div class="box" style="border-color:#f878a8;"><h2 style="color:#f878a8;">LE COUP DE FOUDRE</h2>
+    <p>Fort de ses nouvelles amitiés et d'une foi retrouvée, Tyron se rend à la messe du dimanche. Il porte son plus beau costume — repassé avec soin et légèrement parfumé.</p><br>
+    <p>Sous les vitraux illuminés, parmi les cantiques et l'encens, au milieu de bancs en bois grinçants et de livrets pas suffisament pour touts les fidèles...</p><br>
+    <p>Le temps s'arrête.</p><br>
+    <p>Une <span class="hl" style="color:#c01818;">chevelure rousse</span> brille comme du cuivre dans la lumière du midi. Des <span class="hlg">yeux verts</span> croisent les siens une fraction de seconde.</p><br>
+    <p>Tyron, qui peut affronter un dragon sans sourciller, sent ses jambes devenir aussi solides que de la soupe tiède. Son épée légendaire lui glisse presque des mains.</p><br>
+    <p class="note">Le coup de foudre frappe. Aucun bouclier ne tient contre ça.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-pnk" onclick="nextSc()">CONTINUER...</button></div>`}},
+
+/* 9 — SÉPARATION */
+{bg:'bg-flowers',render(){return`
+  <div class="tag">LE CRUEL DESTIN</div>
+  <div style="display:flex;align-items:flex-end;gap:50px;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+  </div>
+  <div class="box"><h2>LA QUÊTE SÉPARÉE</h2>
+    <p>Bien sûr, le destin — grand amateur de coups tordus depuis toujours — avait prévu autre chose que de laisser ces deux-là se croiser tranquillement à la sortie de la messe.</p><br>
+    <p><span class="hlp">La Princesse</span> reçoit une convocation du Royaume de <span class="hl">Madrid</span> : une année entière d'études, d'espagnol et de sangria obligatoires. Elle part vers l'Ouest.</p><br>
+    <p><span class="hl">Tyron</span>, lui, reçoit l'appel des <span class="hl">Philippines</span> Il part vers l'Est, accompagné de ses compagnons ICAM : <span class="hl">PA, Quentin, Martin et Pilou</span>.</p><br>
+    <p>Un an de séparation. Deux continents. Une promesse silencieuse dans le regard au moment des au revoirs.</p><br>
+    <p class="note">La Princesse part à l'Ouest. Le Chevalier part à l'Est. Le destin prend son temps — il en a toujours eu.</p>
+  </div>
+  <div class="btn-row"><button class="btn" onclick="nextSc()">PARTIR AUX PHILIPPINES ▶</button></div>`}},
+
+/* 10 — PHILIPPINES BEACH */
+{bg:'bg-beach2',render(){return`
+  <div class="tag">CHAPITRE V — LES PHILIPPINES</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}
+  </div>
+  <div class="box"><h2>BIENVENUE AU PARADIS (38°C)</h2>
+    <p>La chaleur de Manille tombe sur le visage de notre chevalier dès la sortie de l'avion comme une serpillière mouillée en pleins face. <span class="hl">38°C, 95% d'humidité</span>. Les pectoraux fondent légèrement.</p><br>
+    <p>Tyron redécouvre ses racines philippines — des soirées, des plats à la contenance originale, et une reconnexion avec une partie de lui-même.</p><br>
+    <p>Mais PA, Quentin, Martin et Pilou ont déjà sorti leur sens aiguis de la fête. Ils tombent sur une entrée prometteuse : <em><span class="hl">"Club Manila Night — Cocktails 80 pesos, musique jusqu'à l'aube"</span></em>.</p><br>
+    <p>— <em>"C'est 80 pesos !"</em> dit PA, toujours proche de ses sous.<br>
+    — <em>"Soit environ 1,20€"</em> calcule Martin.<br>
+    — <em>"ON Y VA"</em> hurle Pilou.</p><br>
+    <p class="note">Le Chevalier soupire. Il faut d'abord trouver la tenue parfaite...</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-gold" onclick="nextSc()">SE PRÉPARER ▶</button></div>`}},
+
+/* 11 — DRESS TO IMPRESS */
+{bg:'bg-beach2',isDress:true,
+  onEnter(){dressTop=null;dressBtm=null;},
+  render(){return`
+    <div class="tag">MINI-JEU : DRESS TO IMPRESS</div>
+    ${px(SPR_TYRON,4)}
+    <div class="box"><h2>CHOISIR LA TENUE</h2>
+      <p>Le Club de Manille exige un <span class="hl">Skin légendaire</span>. La bonne combinaison HAUT + BAS ouvre toutes les portes.<br>Mauvais choix = refus humiliant devant la file.</p>
+    </div>
+    <div style="width:100%;max-width:520px;padding:0 4px;">
+      <p style="font-size:7px;color:#ffd700;text-align:center;margin:8px 0;">— CHOISIR LE HAUT —</p>
+      <div class="outfit-row">
+        <div class="outfit-opt" data-which="top" data-val="robe" onclick="selDress('top','robe')">
+          <div class="outfit-char">${px(SPR_PRINCESS,2)}</div>ROBE<br>PAILLETÉE
+        </div>
+        <div class="outfit-opt" data-which="top" data-val="nu" onclick="selDress('top','nu')">
+          <div class="outfit-char">${px(SPR_TYRON,2)}</div>TORSE<br>NU HUILÉ
+        </div>
+        <div class="outfit-opt" data-which="top" data-val="t-shirt" onclick="selDress('top','t-shirt')">
+          <div class="outfit-char">${px(SPR_GUILD,2)}</div>T-SHIRT<br>CLASSIQUE
+        </div>
+      </div>
+      <p style="font-size:7px;color:#ffd700;text-align:center;margin:8px 0;">— CHOISIR LE BAS —</p>
+      <div class="outfit-row">
+        <div class="outfit-opt" data-which="btm" data-val="perruque" onclick="selDress('btm','perruque')">
+          <div class="outfit-char">${px(SPR_PRINCESS,2)}</div>JUPE<br>ROSE
+        </div>
+        <div class="outfit-opt" data-which="btm" data-val="short" onclick="selDress('btm','short')">
+          <div class="outfit-char">${px(SPR_GUILD,2)}</div>SHORT<br>BRILLANT
+        </div>
+        <div class="outfit-opt" data-which="btm" data-val="jean" onclick="selDress('btm','jean')">
+          <div class="outfit-char">${px(SPR_GUILD,2)}</div>JEAN<br>BASIQUE
+        </div>
+      </div>
+      <div id="dRes" style="font-size:8px;padding:10px;text-align:center;min-height:36px;line-height:1.8;"></div>
+      <div class="btn-row"><button class="btn btn-gold" id="dBtn" style="display:none;" onclick="nextSc()">ENTRER EN SCÈNE ▶</button></div>
+    </div>`}},
+
+/* 12 — RETROUVAILLES */
+{bg:'bg-flowers',render(){return`
+  <div class="tag">CHAPITRE VI — UN AN PLUS TARD...</div>
+  <div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+    ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+  </div>
+  <div class="box" style="border-color:#f878a8;"><h2 style="color:#f878a8;">LES RETROUVAILLES</h2>
+    <p>Trois-cent-soixante-cinq jours. Des messages cryptiques traversant les fuseaux horaires, des appels vidéo pixellisés à 3h du matin, des rêves entêtants...Passons.</p><br>
+    <p><span class="hlp">La Princesse</span> revient de Madrid avec un accent espagnol subtil et des souvenirs plein les bagages. Elle a passée ces soirées au Obulebule, a mangé trop de churros, et a pensé à une certaine personne plus souvent qu'elle ne l'admettrait.</p><br>
+    <p><span class="hl">Tyron</span> revient des Philippines avec... des expériences, des photos floues prises en boîte de nuit,un foix un peu malade, un casier judiciare , et une certitude absolue : cette princesse rousse aux yeux verts, c'est elle.</p><br>
+    <p>Les retrouvailles sont du genre où le temps se fige. Les autres gens autour font poliment semblant de regarder leurs téléphones.</p><br>
+    <p class="note">Mais bien sûr... le destin n'avait pas encore rangé ses mauvaises farces.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-pnk" onclick="nextSc()">CONTINUER...</button></div>`}},
+
+/* 13 — CROISSANT MAUDIT */
+{bg:'bg-dark',render(){return`
+  <div class="tag">UN CROISSANT SUSPECT</div>
+  <div style="display:flex;align-items:flex-end;gap:20px;margin:8px 0;">
+    ${px(SPR_WITCH,3)}${px(SPR_PRINCESS,3)}
+  </div>
+  <div class="box" style="border-color:#d060e0;"><h2 style="color:#d060e0;">LA TRAHISON VIOLETTE</h2>
+    <p>De derrière une colonne en marbre d'une boulangerie haut de gamme, une silhouette en violet surgit : <span class="hlp">LA SORCIÈRE VIOLETTE</span>.</p><br>
+    <p>Personne ne sait vraiment d'où elle vient. Certains disent qu'elle est jalouse. D'autres qu'elle déteste les histoires d'amour heureuses par principe. La vérité : elle a un diplôme de sorcellerie appliquée et beaucoup trop de temps libre.</p><br>
+    <p>Elle tend à la Princesse un <span class="hl">croissant aux amandes</span> avec un sourire trop large pour être honnête.</p><br>
+    <p>— <em>"Avec les compliments de la maison !"</em></p><br>
+    <p>La Princesse, n'ayant pas mangé depuis les churros de Madrid, croque sans méfiance...</p><br>
+    <p><span class="hlr">ERREUR FATALE.</span> Croissant aux amandes maléfiques — allergènes +5, malédiction du sommeil infini. Elle s'effondre dans un halo violet inquiétant.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-red" onclick="nextSc()">RÉAGIR !</button></div>`}},
+
+/* 14 — DRAGON APPARAÎT */
+{bg:'bg-dark',render(){return`
+  <div class="tag">GARDIEN DU SOMMEIL</div>
+  ${px(SPR_DRAGON,3)}
+  <div class="box" style="border-color:#e03030;"><h2 style="color:#e03030;">LE DRAGON DE LA TRISTESSE</h2>
+    <p>Comme si le croissant empoisonné ne suffisait pas, un <span class="hlr">Dragon colossal</span> émerge des brumes violettes. Le Dragon de la Tristesse — gardien des sommeils maudits, écailles rouges, haleine de 2000°C.</p><br>
+    <p>Il utilise sa propre haleine enflammée comme éclairage personnel, ce qui lui économise beaucoup sur la facture d'électricité.</p><br>
+    <p>Il rugit d'une voix qui fait vibrer les vitraux, craquer le parquet et sursauter le voisin du dessous :</p><br>
+    <p style="color:#e03030;font-style:italic;">"PERSONNE NE PASSE ! LA PRINCESSE DORT POUR TOUJOURS !"</p><br>
+    <p>Tyron regarde le dragon. Le dragon regarde Tyron. Le silence dure exactement trois secondes.</p><br>
+    <p class="note">Tyron boit une dernière gorgée de Whey. C'est parti.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-red btn-big" onclick="nextSc()">⚔ COMBATTRE LE DRAGON !</button></div>`}},
+
+/* 15 — BATTLE DRAGON */
+{bg:'bg-battle',isBattle:true,bKey:'dragon',
+  onEnter(){battleType='dragon';playerHP=100;enemyHP=120;isBusy=false;},
+  render(){return renderBattle('dragon');}},
+
+/* 16 — DRAGON VAINCU */
+{bg:'bg-flowers',render(){return`
+  <div class="tag">VICTOIRE ÉPIQUE !</div>
+  ${px(SPR_TYRON,4)}
+  <div class="box"><h2>LE DRAGON EST VAINCU !</h2>
+    <p>Dans un rugissement final qui fait vibrer les fondations du bâtiment (et rompre le double vitrage du voisin d'en face), le Dragon de la Tristesse s'effondre.</p><br>
+    <p>Dans son ultime souffle violet, il murmure : <em>"Tu gagnes... mais l'allergie aux amandes, c'était quand même son problème à elle..."</em></p><br>
+    <p>Tyron s'approche de la Princesse endormie sur son divan violet, entourée de pétales de roses apparus de nulle part (le décor s'adapte automatiquement aux moments importants).</p><br>
+    <p>Il ne reste plus qu'une chose à faire. <span class="hl">Un seul geste peut briser le sort...</span></p><br>
+    <p class="note">Mais attention. Le Papa de la Princesse surveille les environs avec les réflexes d'un militaire retraité particulièrement motivé.</p>
+  </div>
+  <div class="btn-row"><button class="btn btn-pnk" onclick="nextSc()">LE BAISER !</button></div>`}},
+
+/* 17 — KISS GAME */
+{bg:'bg-flowers',isKiss:true,
+  onEnter(){kissCount=0;kissProgress=0;papaLooking=false;},
+  render(){return`
+    <div class="tag">MINI-JEU : LE BAISER DU RÉVEIL</div>
+    <div style="display:flex;gap:16px;align-items:flex-end;justify-content:center;margin:8px 0;">
+      <div>
+        <div id="papaSt">
+          <div style="text-align:center;">${px(SPR_PAPA,2)}</div>
+          <div style="font-size:7px;color:#4caf50;text-align:center;">Zzz... dort</div>
+        </div>
+      </div>
+      <div>${px(SPR_PRINCESS,3)}</div>
+      <div>${px(SPR_TYRON,3)}</div>
+    </div>
+    <div class="box" style="border-color:#ff69b4;"><h2 style="color:#ff69b4;">4 BAISERS POUR BRISER LE SORT</h2>
+      <p>Le sort exige exactement <span class="hl">4 baisers</span> pour être levé (la sorcellerie est très précise sur ce point). Le Papa surveille.</p><br>
+      <p>Attendez qu'il dorme puis maintenez <span class="hlg">EMBRASSER</span>. S'il vous voit, la jauge recule !</p>
+    </div>
+    <div style="text-align:center;margin:10px 0;width:100%;max-width:300px;">
+      <div style="font-size:7px;color:#aaa;margin-bottom:4px;">BAISERS : <span id="kCount" style="color:#ff69b4;">0</span> / 4</div>
+      <div class="love-bar-outer"><div id="lFill" class="love-bar-fill" style="width:0%"></div></div>
+      <div id="kMsg" style="font-size:8px;min-height:22px;margin:6px 0;"></div>
+      <button class="btn btn-pnk btn-big"
+        onmousedown="startKiss()" onmouseup="stopKiss()" onmouseleave="stopKiss()"
+        ontouchstart="startKiss()" ontouchend="stopKiss()">EMBRASSER</button>
+    </div>`}},
+
+/* 18 — FINAL MARIAGE */
+{bg:'bg-wedding',render(){return renderFinal();}},
+];
+
+/* ================================================================
+   FINAL SCENE + STARS
+================================================================ */
+function renderFinal(){
+  setTimeout(()=>{for(let i=0;i<35;i++)setTimeout(spawnStar,i*90);},300);
+  return`
+    <div class="tag glow" style="font-size:8px;color:#ffd700;border-color:#ffd700;">FIN HEUREUSE</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+      ${px(SPR_TYRON,3)}${px(SPR_PRINCESS,3)}
+      ${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}${px(SPR_GUILD,2)}
+      ${px(SPR_PAPA,2)}
+    </div>
+    <div class="box" style="border:4px solid #ffd700;background:linear-gradient(135deg,#06060f,#120622);">
+      <h2 class="center glow" style="font-size:11px;">LE MARIAGE GRANDIOSE</h2>
+      <p>Les deux guildes — <span class="hl">Brive</span> et <span class="hlb">ICAM</span> — réunies pour la première fois dans l'histoire. La salle résonne de rires, de musique et du son caractéristique de Gabin qui chante faux avec conviction.</p><br>
+      <p><span class="hl">Jérémy, Louis, Hugo, Gabin, Sacha, Léon, Auguste</span> forment la haie d'honneur côté Brive. Louise pleure. Personne n'est surpris.</p><br>
+      <p><span class="hlb">Louise, Martin, PA, Mathias, Charly, Micah, Pilou, Titouan, Quentin</span> forment la haie d'honneur côté ICAM. PA dit <em>"ouais non mais c'est beau quand même, (lui aussi aurait voulu embrasser Tyron)"</em>.</p><br>
+      <p>Tanguy envoie un bouquet depuis l'hôpital, accompagné d'un mot : <em style="color:#aaa;">"Pourquoi pas moi ? Mon GymBro — T."</em></p><br>
+      <hr style="border-color:#ffd700;margin:12px 0;">
+      <p style="text-align:center;font-size:10px;" class="glow">RÉCOMPENSE LÉGENDAIRE</p><br>
+      <p style="text-align:center;font-size:10px;color:#ffd700;line-height:1.8;">LA MONTRE DE SPORT<br>CONNECTÉE</p><br>
+      <hr style="border-color:#ffd700;margin:12px 0;">
+      <p style="text-align:center;font-size:12px;line-height:2;" class="glow">JOYEUX ANNIVERSAIRE<br>TYRON !<br>23 ANS !</p>
+    </div>`;
+}
+
+function spawnStar(){
+  const shapes=['★','✦','◆','▲','●','✶','♦'];
+  const colors=['#ffd700','#ff69b4','#4a9eff','#7dff7d','#ff8040','#e040fb'];
+  const el=document.createElement('div');
+  el.className='star-p';
+  el.textContent=shapes[~~(Math.random()*shapes.length)];
+  el.style.color=colors[~~(Math.random()*colors.length)];
+  el.style.left=Math.random()*100+'vw';
+  el.style.animationDuration=(2+Math.random()*2.5)+'s';
+  el.style.animationDelay=Math.random()*0.5+'s';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),5000);
+}
+
+/* ================================================================
+   GAME ENGINE
+================================================================ */
+function render(){
+  const scene=SCENES[sc]; if(!scene)return;
+  const game=document.getElementById('game');
+  game.className=scene.bg||'bg-space';
+  const wrap=document.createElement('div');
+  wrap.className='scene-inner';
+  wrap.innerHTML=scene.render();
+  game.innerHTML=''; game.appendChild(wrap);
+  wrap.scrollTop=0;
+  if(scene.isKiss)initKiss();
+}
+
+function nextSc(){
+  stopKiss();
+  if(papaIntervalId){clearInterval(papaIntervalId);papaIntervalId=null;}
+  sc++;
+  if(sc<SCENES.length){
+    const s=SCENES[sc]; if(s.onEnter)s.onEnter(); render();
+  }
+}
+
+window.onload=render;
+</script>
+</body>
+</html>
